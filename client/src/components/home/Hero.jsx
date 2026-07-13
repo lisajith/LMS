@@ -1,3 +1,5 @@
+import Badge from "../common/Badge";
+
 function Hero() {
   return (
     <section className="bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -8,16 +10,16 @@ function Hero() {
           {/* Left Content */}
           <div>
 
-            <p className="text-blue-600 font-semibold tracking-wide uppercase">
-              Welcome to Our LMS
-            </p>
+            <Badge>
+              🔥LIVE PYTHON BATCH
+            </Badge>
 
-            <h1 className="mt-4 text-5xl lg:text-6xl font-extrabold text-slate-800 leading-tight">
-              Learn.
+            <h1 className="mt-4 text-4xl lg:text-5xl font-extrabold text-slate-800 leading-tight">
+              Learn<span className="text-3xl">...</span>
               <br />
-              Build.
+              Build<span className="text-3xl">...</span>
               <br />
-              Grow.
+              Grow<span className="text-3xl">...</span>
             </h1>
 
             <p className="mt-6 text-lg text-slate-600 leading-8">
@@ -58,7 +60,7 @@ function Hero() {
             <div className="w-96 h-96 rounded-full bg-blue-200 flex items-center justify-center shadow-2xl">
 
               <span className="text-8xl">
-                👨‍💻
+                blaa
               </span>
 
             </div>
