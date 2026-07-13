@@ -1,6 +1,9 @@
+import Navbar from "./components/layout/Footer";
+import AppRoutes from "./routes/AppRoutes";
+
 function App() {
   return (
-    <h1>Welcome to LMS 🚀</h1>
+    <AppRoutes />
   );
 }
 
