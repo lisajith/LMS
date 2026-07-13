@@ -4,6 +4,12 @@ import Container from "../components/common/Container";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/firebase";
+import { sendEmailVerification } from "firebase/auth";
+import { db } from "../firebase/firebase";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+
 function Register() {
 
   const [name, setName] = useState("");
@@ -11,7 +17,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     // Remove extra spaces
@@ -68,7 +74,30 @@ function Register() {
       return;
     }
 
-    alert("Registration Successful! 🎉");
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        trimmedEmail,
+        password
+      );
+      console.log(userCredential.user);
+      await sendEmailVerification(userCredential.user);
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        name: trimmedName,
+        email: trimmedEmail,
+        role: "student",
+        emailVerified: false,
+        createdAt: serverTimestamp(),
+      });
+      alert("Registration successful! Please check your email and verify your account before logging in.");
+    } catch (error) {
+      if(error.code === "auth/email-already-in-use"){
+        alert("email already in use!");
+      }else{
+        alert(error.message);
+      }
+    }
 }
 
   return (
