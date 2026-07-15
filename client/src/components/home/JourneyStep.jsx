@@ -5,16 +5,16 @@ function JourneyStep({ icon: Icon, title, description }) {
     <Card>
       <div className="flex items-center gap-4">
 
-        <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center">
-          <Icon className="w-7 h-7 text-blue-600" />
+        <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{background:"color-mix(in srgb,var(--primary) 15%,white)"}}>
+          <Icon className="w-7 h-7" style={{color:"var(--primary)"}}/>
         </div>
 
         <div>
-          <h3 className="text-xl font-semibold text-slate-800">
+          <h3 className="text-xl font-semibold text-theme">
             {title}
           </h3>
 
-          <p className="text-slate-600 mt-2">
+          <p className="text-theme-muted mt-2">
             {description}
           </p>
         </div>

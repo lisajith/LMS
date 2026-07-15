@@ -73,7 +73,7 @@ function Login() {
 
       <Container>
 
-        <div className="max-w-lg mx-auto bg-white rounded-3xl shadow-lg p-10">
+        <div className="max-w-lg mx-auto card-theme rounded-3xl shadow-lg p-10">
 
           <h1 className="text-4xl font-bold mb-8 text-center">
             Welcome Back

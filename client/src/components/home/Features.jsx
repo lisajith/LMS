@@ -6,7 +6,7 @@ import features from "../../data/features";
 
 function Features() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-theme">
 
       <Container>
 

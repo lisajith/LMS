@@ -1,27 +1,43 @@
+import { Bell, LogOut, GraduationCap } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase/firebase";
+
 function Header() {
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    await signOut(auth);
+    navigate("/");
+  }
+
   return (
-    <header className="h-20 bg-white border-b flex items-center justify-between px-8">
+    <header className="sticky top-0 z-50 h-20 card-theme border-b border-theme flex items-center justify-between px-8">
+      
+      {/* Left Area */}
+      <Link
+        to="/"
+        className="flex items-center gap-3"
+      >
+        <GraduationCap className="text-blue-600" size={34} />
+        <h1 className="text-2xl font-bold text-theme">
+          LMS Portal
+        </h1>
+      </Link>
 
-      <div>
-        <h2 className="text-2xl font-bold">
-          Welcome Back 👋
-        </h2>
-
-        <p className="text-gray-500">
-          Ready to continue your learning?
-        </p>
-      </div>
-
-      <div className="flex items-center gap-4">
-
-        <button className="text-2xl hover:scale-110 transition">
-          🔔
+      {/* Right Area */}
+      <div className="flex items-center gap-5">
+        <button className="p-2 rounded-xl hover-theme transition text-theme-muted">
+          <Bell size={22} />
         </button>
 
-        <div className="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-          L
-        </div>
-
+        <button
+          onClick={handleLogout}
+          className="btn-primary flex items-center gap-2 px-4 py-2 rounded-xl transition"
+        >
+          <LogOut size={18} />
+          Logout
+        </button>
       </div>
 
     </header>

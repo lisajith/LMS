@@ -12,11 +12,11 @@ function SectionTitle({
         </p>
       )}
 
-      <h2 className="mt-3 text-4xl font-bold text-slate-800">
+      <h2 className="mt-3 text-4xl font-bold text-theme">
         {title}
       </h2>
 
-      <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
+      <p className="mt-4 text-lg text-theme-muted max-w-2xl mx-auto">
         {subtitle}
       </p>
 

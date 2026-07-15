@@ -1,0 +1,133 @@
+/* ===========================
+   THEME VARIABLES
+=========================== */
+
+.theme-light {
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface-hover: #f8fafc;
+
+  --text: #0f172a;
+  --text-muted: #64748b;
+
+  --border: #e2e8f0;
+
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+}
+
+.theme-dark {
+  --bg: #020817;
+  --surface: #0f172a;
+  --surface-hover: #1e293b;
+
+  --text: #ffffff;
+  --text-muted: #cbd5e1;
+
+  --border: #334155;
+
+  --primary: #60a5fa;
+  --primary-hover: #3b82f6;
+}
+
+.theme-blue {
+  --bg: #eff6ff;
+  --surface: #ffffff;
+  --surface-hover: #dbeafe;
+
+  --text: #1e3a8a;
+  --text-muted: #3b82f6;
+
+  --border: #bfdbfe;
+
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+}
+
+.theme-purple {
+  --bg: #faf5ff;
+  --surface: #ffffff;
+  --surface-hover: #f3e8ff;
+
+  --text: #581c87;
+  --text-muted: #9333ea;
+
+  --border: #d8b4fe;
+
+  --primary: #7e22ce;
+  --primary-hover: #6b21a8;
+}
+
+.theme-green {
+  --bg: #ecfdf5;
+  --surface: #ffffff;
+  --surface-hover: #dcfce7;
+
+  --text: #14532d;
+  --text-muted: #16a34a;
+
+  --border: #bbf7d0;
+
+  --primary: #15803d;
+  --primary-hover: #166534;
+}
+
+/* ===========================
+   GLOBAL
+=========================== */
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: background .25s ease, color .25s ease;
+}
+
+/* ===========================
+   REUSABLE CLASSES
+=========================== */
+
+.bg-theme {
+  background: var(--bg);
+}
+
+.card-theme{
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.hover-theme:hover {
+  background: var(--surface-hover);
+}
+
+.text-theme {
+  color: var(--text);
+}
+
+.text-theme-muted {
+  color: var(--text-muted);
+}
+
+.border-theme {
+  border-color: var(--border);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.primary-text {
+  color: var(--primary);
+}
+
+.primary-soft {
+  background: color-mix(in srgb, var(--primary) 15%, var(--surface));
+}
+
+.primary-border {
+  border-color: var(--primary);
+}

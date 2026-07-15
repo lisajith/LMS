@@ -80,15 +80,29 @@ function Register() {
         trimmedEmail,
         password
       );
+      await updateProfile(userCredential.user, {
+        displayName: trimmedName,
+      });
       console.log(userCredential.user);
       await sendEmailVerification(userCredential.user);
       await setDoc(doc(db, "users", userCredential.user.uid), {
         uid: userCredential.user.uid,
         name: trimmedName,
         email: trimmedEmail,
+        phone: phone.trim(),
         role: "student",
         emailVerified: false,
         createdAt: serverTimestamp(),
+        
+        photoURL: "",
+        gender: "",
+        dob: "",
+        bio: "",
+        address: "",
+
+        photoURL: `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+          trimmedName
+        )}`,
       });
       alert("Registration successful! Please check your email and verify your account before logging in.");
     } catch (error) {
@@ -105,7 +119,7 @@ function Register() {
 
       <Container>
 
-        <div className="max-w-lg mx-auto bg-white rounded-3xl shadow-lg p-10">
+        <div className="max-w-lg mx-auto card-theme rounded-3xl shadow-lg p-10">
 
           <h1 className="text-4xl font-bold mb-8 text-center">
             Create Account

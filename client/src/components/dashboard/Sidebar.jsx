@@ -1,83 +1,82 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebase/firebase";
+import { NavLink } from "react-router-dom";
+import {
+  BookOpen,
+  NotebookPen,
+  CalendarCheck,
+  FileText,
+  ClipboardCheck,
+  Award,
+  User,
+} from "lucide-react";
 
 const menuItems = [
-  { name: "Dashboard", path: "/dashboard", icon: "🏠" },
-  { name: "My Course", path: "/dashboard/course", icon: "📚" },
-  { name: "Notes", path: "/dashboard/notes", icon: "📝" },
-  { name: "Attendance", path: "/dashboard/attendance", icon: "✅" },
-  { name: "Assignments", path: "/dashboard/assignments", icon: "📄" },
-  { name: "Tests", path: "/dashboard/tests", icon: "✍️" },
-  { name: "Certificates", path: "/dashboard/certificates", icon: "🏆" },
-  { name: "Profile", path: "/dashboard/profile", icon: "👤" },
+  {
+    name: "Courses",
+    path: "/dashboard/courses",
+    icon: <BookOpen size={20} />,
+  },
+  {
+    name: "Notes",
+    path: "/dashboard/notes",
+    icon: <NotebookPen size={20} />,
+  },
+  {
+    name: "Attendance",
+    path: "/dashboard/attendance",
+    icon: <CalendarCheck size={20} />,
+  },
+  {
+    name: "Assignments",
+    path: "/dashboard/assignments",
+    icon: <FileText size={20} />,
+  },
+  {
+    name: "Tests",
+    path: "/dashboard/tests",
+    icon: <ClipboardCheck size={20} />,
+  },
+  {
+    name: "Certificates",
+    path: "/dashboard/certificates",
+    icon: <Award size={20} />,
+  },
+  {
+    name: "Profile",
+    path: "/dashboard/profile",
+    icon: <User size={20} />,
+  },
 ];
 
 function Sidebar() {
-
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  async function handleLogout() {
-    await signOut(auth);
-    navigate("/");
-  }
-
   return (
-    <aside className="w-72 min-h-screen bg-slate-900 text-white flex flex-col">
+    <aside className="fixed top-20 left-0 w-72 h-[calc(100vh-5rem)] card-theme border-r border-theme overflow-y-auto">
+      <div className="px-5 py-6">
+        <nav className="space-y-2">
+          
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.path}
+            >
+              {({ isActive }) => (
+                <div
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+                    isActive
+                      ? "btn-primary text-white font-semibold"
+                      : "text-theme hover-theme"
+                  }`}
+                >
+                  <span>{item.icon}</span>
+                  <span>{item.name}</span>
+                </div>
+              )}
+            </NavLink>
+          ))}
 
-    <div className="p-6">
-
-      {/* Profile */}
-
-      <div className="mb-10">
-
-        <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-2xl font-bold">
-        </div>
-
-        <h1 className="text-3xl font-bold mb-10">
-          <>{user?.displayName || "Student"}</>
-          <p className="text-xs text-gray-400 mb-10 mt-1">
-            Welcome Back 👋
-          </p>
-        </h1>
-
+        </nav>
       </div>
-
-      {/* Menu */}
-
-      <nav className="space-y-2">
-
-        {menuItems.map((item) => (
-          <NavLink
-            key={item.name}
-            to={item.path}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition"
-          >
-            <span>{item.icon}</span>
-            <span>{item.name}</span>
-          </NavLink>
-        ))}
-
-      </nav>
-
-    </div>
-
-    {/* Logout */}
-
-    <div className="mt-auto p-6">
-
-      <button
-        onClick={handleLogout}
-        className="w-full bg-red-500 hover:bg-red-600 transition rounded-xl py-3 font-semibold"
-      >
-        🚪 Logout
-      </button>
-
-    </div>
-
-  </aside>
-);
+    </aside>
+  );
 }
+
 export default Sidebar;

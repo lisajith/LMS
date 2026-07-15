@@ -1,6 +1,6 @@
 const instructor = {
-  name: "Instructor Name",
-  role: "Software Engineer",
+  name: "Sreevani Patnam",
+  role: "Software Developer",
   tagline:
     "Helping students become industry-ready developers through practical learning.",
 
