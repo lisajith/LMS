@@ -45,7 +45,7 @@ function ThemeSwitcher() {
           <button
             key={item.value}
             onClick={() => setTheme(item.value)}
-            className={`rounded-2xl border-2 p-4 transition hover:scale-105 ${
+            className={`cursor-grab active:cursor-grabbing rounded-2xl border-2 p-4 transition hover:scale-105 ${
               theme === item.value
                 ? "border-blue-600"
                 : "border-transparent"
