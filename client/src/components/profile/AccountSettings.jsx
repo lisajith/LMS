@@ -93,7 +93,7 @@ function AccountSettings() {
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-between rounded-xl p-4 hover:bg-red-50 dark:hover:bg-red-950 transition"
+          className="w-full flex items-center justify-between rounded-xl p-4 hover:bg-red-200 dark:hover:bg-red-900 transition"
         >
 
           <div className="flex items-center gap-4">
@@ -116,11 +116,6 @@ function AccountSettings() {
             </div>
 
           </div>
-
-          <ChevronRight
-            size={18}
-            className="text-red-500"
-          />
 
         </button>
 
