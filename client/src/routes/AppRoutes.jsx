@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "../components/layout/MainLayout";
 import DashboardLayout from "../components/dashboard/DashboardLayout"
 
+import PublicRoute from "./PublicRoute";
+
 import Home from "../pages/Home";
 import About from "../pages/About";
 import Courses from "../pages/Courses";
@@ -17,6 +19,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Profile from "../pages/Profile";
 import Certificate from "../pages/Certificate";
 import Certificates from "../pages/Certificates";
+import Notes from "../pages/Notes";
 
 function AppRoutes() {
   return (
@@ -26,8 +29,23 @@ function AppRoutes() {
           <Route path="/about" element={<About />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            }
+          />
+
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
 
           <Route path="/dashboard"
@@ -40,6 +58,7 @@ function AppRoutes() {
             <Route index element={<Dashboard />} />
             <Route path="courses" element={<DashboardCourses />} />
             <Route path="course/:id" element={<CourseDetails />} />
+            <Route path="notes" element={<Notes />} />
             <Route path="certificate/:id" element={<Certificate />} />
             <Route path="certificates" element={<Certificates />} />
             <Route path="profile" element={<Profile />} />

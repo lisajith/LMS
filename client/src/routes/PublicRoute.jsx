@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-function ProtectedRoute({ children }) {
+function PublicRoute({ children }) {
 
   const { user, loading } = useAuth();
 
@@ -13,17 +13,12 @@ function ProtectedRoute({ children }) {
     );
   }
 
-  // User not logged in
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Logged in but NOT verified
-  if (!user.emailVerified) {
-    return <Navigate to="/login" replace />;
+  // Only verified users are redirected
+  if (user && user.emailVerified) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;
 }
 
-export default ProtectedRoute;
+export default PublicRoute;

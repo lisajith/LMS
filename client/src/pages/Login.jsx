@@ -5,8 +5,17 @@ import Container from "../components/common/Container";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+
+import {
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+
+import { auth, db } from "../firebase/firebase";
 
 function Login() {
 
@@ -16,57 +25,76 @@ function Login() {
   const [password, setPassword] = useState("");
 
   async function handleSubmit(e) {
+
     e.preventDefault();
 
-    // Remove extra spaces
     const trimmedEmail = email.trim();
 
-    console.log({
-      email: trimmedEmail,
-      password,
-    });
-
-    // Empty fields
-    if (!trimmedEmail || !password ) {
+    if (!trimmedEmail || !password) {
       alert("Please fill all fields.");
       return;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(trimmedEmail)) {
-      alert("Please enter a valid email address.");
+      alert("Please enter a valid email.");
       return;
     }
 
-    // Password length
     if (password.length < 8) {
-      alert("Password must be at least 8 characters long.");
+      alert("Password must be at least 8 characters.");
       return;
     }
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        trimmedEmail,
-        password
-      );
+
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth,
+          trimmedEmail,
+          password
+        );
+
+      await userCredential.user.reload();
+
+      // Email not verified
       if (!userCredential.user.emailVerified) {
-        alert("Please verify your email before logging in.");
+
         await signOut(auth);
+
+        alert(
+          "Please verify your email before logging in."
+        );
+
         return;
       }
-      console.log(userCredential.user);
-      navigate("/dashboard");
+
+      // Update Firestore only once
+      await updateDoc(
+        doc(db, "users", userCredential.user.uid),
+        {
+          emailVerified: true,
+        }
+      );
+
+      navigate("/dashboard", {
+        replace: true,
+      });
+
     } catch (error) {
-      if (error.code === "auth/invalid-credential") {
+
+      if (
+        error.code === "auth/invalid-credential"
+      ) {
         alert("Invalid email or password.");
       } else {
         alert(error.message);
       }
+
     }
-}
+
+  }
 
   return (
     <section className="py-24">
@@ -80,30 +108,28 @@ function Login() {
           </h1>
 
           <form
-              onSubmit={handleSubmit}
-              className="space-y-6"
+            onSubmit={handleSubmit}
+            className="space-y-6"
           >
 
             <Input
               label="Email"
-              placeholder="Email address"
               type="email"
+              placeholder="Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e)=>setEmail(e.target.value)}
             />
 
             <Input
               label="Password"
-              placeholder="Password"
               type="password"
+              placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e)=>setPassword(e.target.value)}
             />
 
             <Button type="submit">
-
               Let's GO
-
             </Button>
 
           </form>
@@ -114,6 +140,7 @@ function Login() {
 
     </section>
   );
+
 }
 
 export default Login;
