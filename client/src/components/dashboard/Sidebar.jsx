@@ -42,14 +42,14 @@ const menuItems = [
     icon: <Award size={20} />,
   },
   {
-    name: "Profile",
-    path: "/dashboard/profile",
-    icon: <User size={20} />,
-  },
-  {
     name: "Announcements",
     path: "/dashboard/announcements",
     icon: <Bell size={20} />,
+  },
+  {
+    name: "Profile",
+    path: "/dashboard/profile",
+    icon: <User size={20} />,
   },
 ];
 
