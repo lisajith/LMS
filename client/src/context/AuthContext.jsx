@@ -93,6 +93,7 @@ export function AuthProvider({ children }) {
       value={{
         user,
         userData,
+        setUserData,
         loading,
       }}
     >
