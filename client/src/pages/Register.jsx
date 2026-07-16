@@ -4,9 +4,8 @@ import Container from "../components/common/Container";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { auth } from "../firebase/firebase";
-import { sendEmailVerification } from "firebase/auth";
 import { db } from "../firebase/firebase";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
@@ -14,6 +13,7 @@ function Register() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -23,16 +23,18 @@ function Register() {
     // Remove extra spaces
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
+    const trimmedPhone = phone.trim();
 
     console.log({
       name: trimmedName,
       email: trimmedEmail,
+      phone: trimmedPhone,
       password,
       confirmPassword,
     });
 
     // 1. Empty fields
-    if (!trimmedName || !trimmedEmail || !password || !confirmPassword) {
+    if (!trimmedName || !trimmedEmail || !trimmedPhone || !password || !confirmPassword) {
       alert("Please fill all fields.");
       return;
     }
@@ -48,6 +50,14 @@ function Register() {
 
     if (!emailRegex.test(trimmedEmail)) {
       alert("Please enter a valid email address.");
+      return;
+    }
+
+    // Phone validation
+    const phoneRegex = /^[6-9]\d{9}$/;
+
+    if (!phoneRegex.test(phone.trim())) {
+      alert("Please enter a valid 10-digit phone number.");
       return;
     }
 
@@ -89,7 +99,7 @@ function Register() {
         uid: userCredential.user.uid,
         name: trimmedName,
         email: trimmedEmail,
-        phone: phone.trim(),
+        phone: trimmedPhone,
         role: "student",
         emailVerified: false,
         createdAt: serverTimestamp(),
@@ -100,9 +110,9 @@ function Register() {
         bio: "",
         address: "",
 
-        photoURL: `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
-          trimmedName
-        )}`,
+        // photoURL: `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+        //   trimmedName
+        // )}`,
       });
       alert("Registration successful! Please check your email and verify your account before logging in.");
     } catch (error) {
@@ -143,6 +153,14 @@ function Register() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <Input
+              label="Phone Number"
+              placeholder="Enter your phone number"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
 
             <Input
