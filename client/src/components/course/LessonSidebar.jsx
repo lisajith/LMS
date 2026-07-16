@@ -3,6 +3,7 @@ import {
   Check,
   Lock,
   Award,
+  NotebookPen
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -14,6 +15,7 @@ function LessonSidebar({
   completedLessons = [],
   certificateUnlocked = false,
   courseId,
+  courseName
 }) {
 
   const navigate = useNavigate();
@@ -133,6 +135,47 @@ function LessonSidebar({
           );
 
         })}
+
+        {/* Notes */}
+
+        <div className="border-t border-theme mt-4 pt-5">
+
+          <button
+            onClick={() =>
+              navigate(`/dashboard/course/${courseId}/notes`)
+            }
+            className="
+              w-full
+              flex
+              items-center
+              gap-3
+              p-4
+              rounded-xl
+              hover-theme
+              transition
+            "
+          >
+
+            <NotebookPen
+              size={20}
+              className="primary-text"
+            />
+
+            <div className="flex flex-col items-start">
+
+              <span className="font-semibold">
+                Notes
+              </span>
+
+              <span className="text-xs text-theme-muted">
+                {courseName}
+              </span>
+
+            </div>
+
+          </button>
+
+        </div>
 
         {/* Certificate */}
 

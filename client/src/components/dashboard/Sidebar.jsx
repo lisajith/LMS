@@ -7,6 +7,7 @@ import {
   ClipboardCheck,
   Award,
   User,
+  Bell
 } from "lucide-react";
 
 const menuItems = [
@@ -44,6 +45,11 @@ const menuItems = [
     name: "Profile",
     path: "/dashboard/profile",
     icon: <User size={20} />,
+  },
+  {
+    name: "Announcements",
+    path: "/dashboard/announcements",
+    icon: <Bell size={20} />,
   },
 ];
 

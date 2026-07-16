@@ -1,15 +1,26 @@
 import {
-  LucideBookOpen,
+  BookOpen,
   Download,
   Eye,
   FileText,
+  User,
+  CalendarDays,
 } from "lucide-react";
 
 function NoteCard({ note }) {
 
-  return (
+  const formattedDate =
+    note.updatedAt?.toDate?.().toLocaleDateString(
+      "en-IN",
+      {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      }
+    ) || "Recently Updated";
 
-    <div className="card-theme rounded-2xl shadow-md p-6 hover:-translate-y-1 transition">
+  return (
+    <div className="card-theme rounded-2xl shadow-md p-6 hover:-translate-y-1 transition duration-300">
 
       <div className="flex justify-between items-start">
 
@@ -17,62 +28,96 @@ function NoteCard({ note }) {
 
           <div className="flex items-center gap-2">
 
-            <LucideBookOpen
-              size={22}
+            <BookOpen
+              size={24}
               className="primary-text"
             />
 
-            <h2 className="text-xl font-bold">
-
-              {note.title}
-
+            <h2 className="text-2xl font-bold">
+              {note.courseName}
             </h2>
 
           </div>
 
-          <p className="mt-2 text-theme-muted">
-
-            {note.courseName}
-
+          <p className="text-theme-muted mt-2">
+            Latest Course Materials
           </p>
 
         </div>
 
         <FileText
-          size={34}
+          size={36}
           className="primary-text"
         />
 
       </div>
 
+      <div className="mt-6 space-y-4">
+
+        <div className="flex items-center gap-3">
+
+          <User
+            size={18}
+            className="primary-text"
+          />
+
+          <div>
+
+            <p className="text-sm font-semibold">
+              Instructor
+            </p>
+
+            <p className="text-theme-muted">
+              {note.instructor}
+            </p>
+
+          </div>
+
+        </div>
+
+        <div className="flex items-center gap-3">
+
+          <CalendarDays
+            size={18}
+            className="primary-text"
+          />
+
+          <div>
+
+            <p className="text-sm font-semibold">
+              Batch
+            </p>
+
+            <p className="text-theme-muted">
+              {note.batch}
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
       <div className="mt-6">
 
-        <p className="text-sm font-semibold">
-
-          Lesson
-
+        <p className="font-semibold">
+          Description
         </p>
 
-        <p className="text-theme-muted">
-
-          {note.lessonTitle}
-
+        <p className="text-theme-muted mt-2">
+          {note.description}
         </p>
 
       </div>
 
-      <div className="mt-5">
+      <div className="mt-6">
 
-        <p className="text-sm font-semibold">
-
-          Description
-
+        <p className="font-semibold">
+          Last Updated
         </p>
 
         <p className="text-theme-muted mt-1">
-
-          {note.description}
-
+          {formattedDate}
         </p>
 
       </div>
@@ -88,7 +133,6 @@ function NoteCard({ note }) {
           <Eye size={18} />
 
           Preview
-
         </a>
 
         <a
@@ -99,13 +143,11 @@ function NoteCard({ note }) {
           <Download size={18} />
 
           Download
-
         </a>
 
       </div>
 
     </div>
-
   );
 
 }

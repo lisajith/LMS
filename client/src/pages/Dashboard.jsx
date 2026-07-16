@@ -2,6 +2,7 @@ import { useAuth } from "../context/AuthContext";
 
 import StatCards from "../components/dashboard/StatCards";
 import MyCourses from "../components/dashboard/MyCourses";
+import LatestAnnouncements from "../components/announcements/LatestAnnouncements";
 import { Smile, Sun, Hand, Icon } from "lucide-react";
 
 function Dashboard() {
@@ -49,37 +50,7 @@ function Dashboard() {
 
       {/* Recent Activity */}
 
-      <div className="card-theme rounded-2xl shadow-md p-6">
-
-        <h2 className="text-2xl font-bold mb-5">
-          Recent Activity
-        </h2>
-
-        <div className="space-y-4">
-
-          <div className="border-l-4 border-blue-600 pl-4">
-            <h3 className="font-semibold">
-              Enrolled in Python Programming
-            </h3>
-
-            <p className="text-slate-500 text-sm">
-              Start your first lesson and begin learning.
-            </p>
-          </div>
-
-          <div className="border-l-4 border-green-600 pl-4">
-            <h3 className="font-semibold">
-              Progress Tracking Enabled
-            </h3>
-
-            <p className="text-slate-500 text-sm">
-              Your lesson completion is now saved automatically.
-            </p>
-          </div>
-
-        </div>
-
-      </div>
+      <LatestAnnouncements />
 
     </div>
   );

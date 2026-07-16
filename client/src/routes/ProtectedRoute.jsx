@@ -13,13 +13,7 @@ function ProtectedRoute({ children }) {
     );
   }
 
-  // User not logged in
   if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Logged in but NOT verified
-  if (!user.emailVerified) {
     return <Navigate to="/login" replace />;
   }
 

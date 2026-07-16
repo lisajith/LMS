@@ -10,6 +10,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import {
   doc,
   getDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 import { auth, db } from "../firebase/firebase";
@@ -24,72 +25,80 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
 
-    const unsubscribe =
-      onAuthStateChanged(
-        auth,
-        async (currentUser) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      async (currentUser) => {
 
-          if (currentUser?.emailVerified) {
-            setUser(currentUser);
-          } else {
-            setUser(null);
-          }
+        if (!currentUser) {
+          setUser(null);
+          setUserData(null);
+          setLoading(false);
+          return;
+        }
 
-          if (currentUser) {
+        await currentUser.reload();
 
-            try {
+        // Ignore unverified users
+        if (!currentUser.emailVerified) {
+          setUser(null);
+          setUserData(null);
+          setLoading(false);
+          return;
+        }
 
-              const snapshot =
-                await getDoc(
-                  doc(
-                    db,
-                    "users",
-                    currentUser.uid
-                  )
-                );
+        setUser(currentUser);
 
-              if (snapshot.exists()) {
-                setUserData(snapshot.data());
-              } else {
-                setUserData(null);
-              }
+        try {
 
-            } catch (err) {
-              console.error(err);
+          const userRef = doc(
+            db,
+            "users",
+            currentUser.uid
+          );
+
+          const snapshot = await getDoc(userRef);
+
+          if (snapshot.exists()) {
+
+            const data = snapshot.data();
+
+            if (!data.emailVerified) {
+
+              await updateDoc(userRef, {
+                emailVerified: true,
+              });
+
+              data.emailVerified = true;
             }
 
-          } else {
-
-            setUserData(null);
+            setUserData(data);
 
           }
 
-          setLoading(false);
-
+        } catch (err) {
+          console.error(err);
         }
-      );
+
+        setLoading(false);
+
+      }
+    );
 
     return unsubscribe;
 
   }, []);
 
   return (
-
     <AuthContext.Provider
       value={{
         user,
         userData,
-        setUserData,
         loading,
       }}
     >
-
       {children}
-
     </AuthContext.Provider>
-
   );
-
 }
 
 export function useAuth() {

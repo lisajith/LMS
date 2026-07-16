@@ -2,6 +2,18 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 
 import {
+  collection,
+  getDocs,
+  orderBy,
+  limit,
+  query,
+  where,
+  addDoc,
+  serverTimestamp
+} from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+
+import {
   GraduationCap,
   House,
   BookOpen,
@@ -27,10 +39,70 @@ function Navbar() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [announcements, setAnnouncements] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
   async function handleLogout() {
     await signOut(auth);
     navigate("/");
   }
+
+  async function handleNotificationClick() {
+    const nextState = !notificationsOpen;
+    setNotificationsOpen(nextState);
+    if (!nextState || unreadCount === 0) return;
+    const readQuery = query(
+      collection(db, "announcementReads"),
+      where("userId", "==", user.uid)
+    );
+    const readSnapshot = await getDocs(readQuery);
+    const alreadyRead = readSnapshot.docs.map(
+      doc => doc.data().announcementId
+    );
+    const unreadAnnouncements = announcements.filter(
+      item => !alreadyRead.includes(item.id)
+    );
+    for (const item of unreadAnnouncements) {
+      await addDoc(collection(db, "announcementReads"), {
+        userId: user.uid,
+        announcementId: item.id,
+        readAt: serverTimestamp(),
+      });
+    }
+    setUnreadCount(0);
+  }
+
+  useEffect(() => {
+      async function fetchAnnouncements() {
+        const announcementQuery = query(
+          collection(db, "announcements"),
+          orderBy("createdAt", "desc"),
+          limit(5)
+        );
+        const announcementSnapshot = await getDocs(announcementQuery);
+        const announcementList = announcementSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAnnouncements(announcementList);
+        const readQuery = query(
+          collection(db, "announcementReads"),
+          where("userId", "==", user.uid)
+        );
+        const readSnapshot = await getDocs(readQuery);
+        const readIds = readSnapshot.docs.map(
+          doc => doc.data().announcementId
+        );
+        const unread = announcementList.filter(
+          item => !readIds.includes(item.id)
+        );
+        setUnreadCount(unread.length);
+      }
+      if (user) {
+        fetchAnnouncements();
+      }
+    }, [user]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -41,7 +113,6 @@ function Navbar() {
         setOpen(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
 
     return () =>
@@ -184,12 +255,61 @@ function Navbar() {
             </>
           ) : (
             <>
-              <button className="p-2 rounded-xl hover-theme transition">
-                <Bell
-                  size={21}
-                  className="text-theme-muted"
-                />
-              </button>
+              <div className="relative">
+                <button
+                  onClick={handleNotificationClick}
+                  className="relative p-2 rounded-xl hover-theme transition"
+                >
+                  <Bell
+                    size={21}
+                    className="text-theme-muted"
+                  />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+                {notificationsOpen && (
+                  <div className="absolute right-0 mt-3 w-96 rounded-2xl card-theme border border-theme shadow-xl overflow-hidden">
+                    <div className="p-4 border-b border-theme font-semibold">
+                      Latest Announcements
+                    </div>
+                    {announcements.length === 0 ? (
+                      <p className="p-5 text-theme-muted">
+                        No announcements
+                      </p>
+                    ) : (
+                      announcements.map(item => (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            navigate("/dashboard/announcements");
+                            setNotificationsOpen(false);
+                          }}
+                          className="w-full text-left px-5 py-4 hover-theme transition border-b border-theme"
+                        >
+                          <p className="font-semibold">
+                            {item.title}
+                          </p>
+                          <p className="text-sm text-theme-muted mt-1">
+                            {item.message}
+                          </p>
+                        </button>
+                      ))
+                    )}
+                    <button
+                      onClick={() => {
+                        navigate("/dashboard/announcements");
+                        setNotificationsOpen(false);
+                      }}
+                      className="w-full py-3 font-semibold primary-text hover-theme"
+                    >
+                      View All
+                    </button>
+                  </div>
+                )}
+              </div>
 
               <div className="relative" ref={dropdownRef}>
                 <button
@@ -225,7 +345,7 @@ function Navbar() {
                     >
                       <div className="p-4 border-b border-theme">
                         <h3 className="font-semibold text-theme">
-                          {userData?.displayName}
+                          {userData?.name}
                         </h3>
 
                         <p className="text-sm text-theme-muted">

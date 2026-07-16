@@ -10,12 +10,7 @@ import {
   signOut,
 } from "firebase/auth";
 
-import {
-  doc,
-  updateDoc,
-} from "firebase/firestore";
-
-import { auth, db } from "../firebase/firebase";
+import { auth } from "../firebase/firebase";
 
 function Login() {
 
@@ -69,14 +64,6 @@ function Login() {
 
         return;
       }
-
-      // Update Firestore only once
-      await updateDoc(
-        doc(db, "users", userCredential.user.uid),
-        {
-          emailVerified: true,
-        }
-      );
 
       navigate("/dashboard", {
         replace: true,

@@ -13,8 +13,7 @@ function PublicRoute({ children }) {
     );
   }
 
-  // Only verified users are redirected
-  if (user && user.emailVerified) {
+  if (user) {
     return <Navigate to="/dashboard" replace />;
   }
 

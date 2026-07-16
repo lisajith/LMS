@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
+
 import {
   collection,
   getDocs,
   orderBy,
   query,
+  where,
 } from "firebase/firestore";
 
 import { db } from "../firebase/firebase";
+
 import NoteCard from "../components/notes/NoteCard";
 
 import {
-  Search,
   LoaderCircle,
-  LucideNotebookPen,
+  NotebookPen,
   NotepadTextDashed,
+  Search,
 } from "lucide-react";
 
 function Notes() {
@@ -21,49 +25,98 @@ function Notes() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const { user } = useAuth();
 
   useEffect(() => {
 
     async function fetchNotes() {
 
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
       try {
 
-        const q = query(
-          collection(db, "notes"),
-          orderBy("createdAt", "desc")
+        // Get enrolled courses
+        const enrollmentQuery = query(
+          collection(db, "enrollments"),
+          where("userId", "==", user.uid)
         );
 
-        const snapshot = await getDocs(q);
-        console.log(snapshot.docs);
+        const enrollmentSnapshot =
+          await getDocs(enrollmentQuery);
 
-        const notesList = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        console.log(notesList);
+        const enrolledCourseIds =
+          enrollmentSnapshot.docs.map(
+            (doc) => doc.data().courseId
+          );
+
+        if (enrolledCourseIds.length === 0) {
+          setNotes([]);
+          setLoading(false);
+          return;
+        }
+
+        // Get all notes
+        const notesQuery = query(
+          collection(db, "notes"),
+          orderBy("updatedAt", "desc")
+        );
+
+        const notesSnapshot =
+          await getDocs(notesQuery);
+
+        // Keep only enrolled course notes
+        const notesList = notesSnapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .filter((note) =>
+            enrolledCourseIds.includes(note.courseId)
+          );
 
         setNotes(notesList);
 
       } catch (error) {
-        console.error("Error loading notes:", error);
+
+        console.error(error);
+
       } finally {
+
         setLoading(false);
+
       }
 
     }
 
     fetchNotes();
 
-  }, []);
+  }, [user]);
 
   const filteredNotes = notes.filter((note) => {
 
     const keyword = search.toLowerCase();
 
     return (
-      note.title?.toLowerCase().includes(keyword) ||
-      note.courseName?.toLowerCase().includes(keyword) ||
-      note.lessonTitle?.toLowerCase().includes(keyword)
+
+      note.courseName
+        ?.toLowerCase()
+        .includes(keyword)
+
+      ||
+
+      note.instructor
+        ?.toLowerCase()
+        .includes(keyword)
+
+      ||
+
+      note.batch
+        ?.toLowerCase()
+        .includes(keyword)
+
     );
 
   });
@@ -75,8 +128,8 @@ function Notes() {
       <div className="flex justify-center items-center py-32 gap-3">
 
         <LoaderCircle
-          className="animate-spin primary-text"
           size={28}
+          className="animate-spin primary-text"
         />
 
         <p className="text-theme-muted">
@@ -95,18 +148,16 @@ function Notes() {
 
       <div className="flex items-center gap-3 mb-8">
 
-        <LucideNotebookPen
+        <NotebookPen
           size={34}
           className="primary-text"
         />
 
         <h1 className="text-4xl font-bold">
-            Notes
+          Course Materials
         </h1>
 
       </div>
-
-      {/* Search */}
 
       <div className="relative mb-8">
 
@@ -117,15 +168,15 @@ function Notes() {
 
         <input
           type="text"
-          placeholder="Search notes by title, course or lesson..."
+          placeholder="Search by course, instructor or batch..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) =>
+            setSearch(e.target.value)
+          }
           className="w-full pl-12 pr-4 py-4 rounded-xl border border-theme bg-theme text-theme outline-none focus:ring-2 focus:ring-blue-500"
         />
 
       </div>
-
-      {/* Empty */}
 
       {filteredNotes.length === 0 ? (
 
@@ -137,11 +188,15 @@ function Notes() {
           />
 
           <h2 className="text-2xl font-bold mb-2">
-            No Notes Found
+
+            No Course Materials Found
+
           </h2>
 
           <p className="text-theme-muted">
+
             Try another search keyword.
+
           </p>
 
         </div>
@@ -155,6 +210,7 @@ function Notes() {
             <NoteCard
               key={note.id}
               note={note}
+              showCourseLink={true}
             />
 
           ))}

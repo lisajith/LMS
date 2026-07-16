@@ -20,6 +20,8 @@ import Profile from "../pages/Profile";
 import Certificate from "../pages/Certificate";
 import Certificates from "../pages/Certificates";
 import Notes from "../pages/Notes";
+import CourseNotes from "../pages/CourseNotes";
+import Announcements from "../pages/Announcements";
 
 function AppRoutes() {
   return (
@@ -56,9 +58,11 @@ function AppRoutes() {
             } 
           >
             <Route index element={<Dashboard />} />
+            <Route path="announcements" element={<Announcements />} />
             <Route path="courses" element={<DashboardCourses />} />
             <Route path="course/:id" element={<CourseDetails />} />
             <Route path="notes" element={<Notes />} />
+            <Route path="course/:id/notes" element={<CourseNotes />}/>
             <Route path="certificate/:id" element={<Certificate />} />
             <Route path="certificates" element={<Certificates />} />
             <Route path="profile" element={<Profile />} />

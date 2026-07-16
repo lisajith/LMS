@@ -276,6 +276,11 @@ function CourseDetails() {
           enrollment?.certificateUnlocked || false
         }
         courseId={id}
+        courseName={
+          selectedLesson?.courseName ||
+          enrollment?.courseName ||
+          "Course"
+        }
       />
 
       {/* Lesson Content */}
