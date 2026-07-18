@@ -1,6 +1,14 @@
-import Badge from "../common/Badge";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+
+import {
+  ArrowRight,
+  BookOpen,
+  GraduationCap,
+  ClipboardCheck,
+} from "lucide-react";
+
+import Badge from "../common/Badge";
 
 function Hero() {
   const { user } = useAuth();
@@ -13,70 +21,179 @@ function Hero() {
       navigate("/login");
     }
   }
+
   return (
     <section className="bg-theme">
       <div className="max-w-7xl mx-auto px-6 py-24">
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
 
-          {/* Left Content */}
+          {/* LEFT */}
+
           <div>
 
             <Badge>
-              🔥LIVE PYTHON BATCH
+              Learning Management System
             </Badge>
 
-            <h1 className="mt-4 text-4xl lg:text-5xl font-extrabold text-theme leading-tight">
-              Learn<span className="text-3xl">...</span>
+            <h1 className="mt-6 text-5xl lg:text-6xl font-extrabold leading-tight text-theme">
+
+              Modern Learning
+
               <br />
-              Build<span className="text-3xl">...</span>
-              <br />
-              Grow<span className="text-3xl">...</span>
+
+              Made
+
+              <span className="primary-text">
+
+                {" "}Simple
+
+              </span>
+
             </h1>
 
-            <p className="mt-6 text-lg text-theme-muted leading-8">
-              Master Python through live classes, real-world projects,
-              mentorship, and industry-focused learning that prepares
-              you for your career.
+            <p className="mt-8 text-lg leading-8 text-theme-muted max-w-xl">
+
+              Access courses, complete assignments, attempt online tests,
+              read announcements, manage notes and track your learning —
+              everything in one modern platform.
+
             </p>
 
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="mt-10 flex flex-wrap gap-5">
 
               <button
                 onClick={handleStartLearning}
-                className="btn-primary text-white px-7 py-3 rounded-xl transition duration-300"
+                className="btn-primary px-7 py-3 rounded-xl flex items-center gap-2"
               >
-                🚀 Start Learning
+                Get Started
+
+                <ArrowRight size={18} />
+
               </button>
 
-              <button className="border border-theme hover-theme text-theme px-7 py-3 rounded-xl transition duration-300">
-                📚 Explore Courses
+              <button
+                onClick={() => navigate("/courses")}
+                className="border border-theme hover-theme px-7 py-3 rounded-xl flex items-center gap-2"
+              >
+                <BookOpen size={18} />
+
+                Explore Courses
+
               </button>
-
-            </div>
-
-            <div className="mt-10 flex items-center gap-3">
-
-              <span className="text-theme-muted text-xl">
-                ⭐⭐⭐⭐⭐
-              </span>
-
-              <p className="text-theme-muted">
-                Trusted by aspiring learners.
-              </p>
 
             </div>
 
           </div>
 
-          {/* Right Side */}
-          <div className="flex justify-center">
+          {/* RIGHT */}
 
-            <div className="w-96 h-96 rounded-full flex items-center justify-center shadow-2xl" style={{background:"color-mix(in srgb,var(--primary) 20%,white)"}}>
+          <div>
 
-              <span className="text-8xl">
-                blaa
-              </span>
+            <div className="card-theme rounded-4xl p-10 shadow-2xl border border-theme">
+
+              <h3 className="text-2xl font-bold">
+
+                Platform Features
+
+              </h3>
+
+              <p className="mt-2 text-theme-muted">
+
+                Everything you need to learn efficiently.
+
+              </p>
+
+              <div className="mt-10 space-y-5">
+
+                <div className="flex items-center gap-4 p-5 rounded-2xl bg-theme-secondary">
+
+                  <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center">
+
+                    <GraduationCap
+                      className="text-blue-600"
+                      size={28}
+                    />
+
+                  </div>
+
+                  <div>
+
+                    <h4 className="font-semibold text-lg">
+
+                      Interactive Courses
+
+                    </h4>
+
+                    <p className="text-theme-muted text-sm">
+
+                      Structured lessons with notes and resources.
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+                <div className="flex items-center gap-4 p-5 rounded-2xl bg-theme-secondary">
+
+                  <div className="w-14 h-14 rounded-xl bg-green-100 flex items-center justify-center">
+
+                    <ClipboardCheck
+                      className="text-green-600"
+                      size={28}
+                    />
+
+                  </div>
+
+                  <div>
+
+                    <h4 className="font-semibold text-lg">
+
+                      Assignments & Tests
+
+                    </h4>
+
+                    <p className="text-theme-muted text-sm">
+
+                      Practice your skills with assessments.
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+                <div className="flex items-center gap-4 p-5 rounded-2xl bg-theme-secondary">
+
+                  <div className="w-14 h-14 rounded-xl bg-purple-100 flex items-center justify-center">
+
+                    <BookOpen
+                      className="text-purple-600"
+                      size={28}
+                    />
+
+                  </div>
+
+                  <div>
+
+                    <h4 className="font-semibold text-lg">
+
+                      Learn Anytime
+
+                    </h4>
+
+                    <p className="text-theme-muted text-sm">
+
+                      Access your learning materials whenever you need.
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
 
             </div>
 
