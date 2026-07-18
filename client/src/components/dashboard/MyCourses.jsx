@@ -119,6 +119,7 @@ function MyCourses() {
               key={course.id}
               {...course}
               showProgress={true}
+              myCourse={true}
             />
           ))}
         </div>

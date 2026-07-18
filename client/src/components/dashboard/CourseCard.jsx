@@ -1,58 +1,48 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { db } from "../../firebase/firebase";
+
 import {
   doc,
-  getDoc,
   setDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+
+import { useState } from "react";
+
+import {
+  Book,
+  Star,
+} from "lucide-react";
 
 function CourseCard({
   id,
   title,
   instructor,
-  progress,
-  lessons,
+  progress = 0,
+  lessonCount = 0,
   rating,
   thumbnail,
   showProgress = false,
+  enrolled = false,
+  refreshCourses,
+  myCourse = false,
 }) {
+
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const [enrolled, setEnrolled] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function checkEnrollment() {
-      if (!user) {
-        setEnrolled(false);
-        return;
-      }
-
-      const enrollmentRef = doc(
-        db,
-        "enrollments",
-        `${user.uid}_${id}`
-      );
-
-      const enrollmentSnap = await getDoc(enrollmentRef);
-
-      setEnrolled(enrollmentSnap.exists());
-    }
-
-    checkEnrollment();
-  }, [user, id]);
-
   async function handleEnroll() {
+
     if (!user) {
       navigate("/login");
       return;
     }
 
     try {
+
       setLoading(true);
 
       const enrollmentRef = doc(
@@ -67,17 +57,29 @@ function CourseCard({
         enrolledAt: serverTimestamp(),
         progress: 0,
         completedLessons: [],
+        lastLesson: null,
+        completed: false,
+        certificateUnlocked: false,
       });
 
-      setEnrolled(true);
+      if (refreshCourses) {
+        await refreshCourses();
+      }
+
     } catch (error) {
+
       console.error(error);
+
     } finally {
+
       setLoading(false);
+
     }
+
   }
 
   return (
+
     <div className="card-theme rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1">
 
       <img
@@ -97,7 +99,9 @@ function CourseCard({
         </p>
 
         {showProgress ? (
+
           <>
+
             <div className="w-full h-3 bg-slate-200 rounded-full mt-5 overflow-hidden">
 
               <div
@@ -106,61 +110,120 @@ function CourseCard({
                     ? "bg-green-500"
                     : "bg-blue-600"
                 }`}
-                style={{ width: `${progress}%` }}
-              ></div>
+                style={{
+                  width: `${progress}%`,
+                }}
+              />
 
             </div>
 
             <p className="mt-2 text-sm font-medium text-theme-muted">
               {progress}% Completed
             </p>
+
           </>
+
         ) : (
+
           <p className="mt-4 text-sm text-theme-muted">
-            {enrolled
+
+            {myCourse
               ? "Continue your learning"
+              : enrolled
+              ? "Ready to start learning"
               : "Not enrolled yet"}
+
           </p>
+
         )}
 
         <div className="flex justify-between mt-5 text-sm text-theme-muted">
 
-          <span>⭐ {rating}</span>
+          <span className="flex items-center gap-2">
 
-          <span>📚 {lessons} Lessons</span>
+            <Star size={18} />
+
+            {rating}
+
+          </span>
+
+          <span className="flex items-center gap-2">
+
+            <Book size={18} />
+
+            {lessonCount} Lessons
+
+          </span>
 
         </div>
 
         <button
+
           disabled={loading}
+
           onClick={() => {
-            if (enrolled) {
+
+            if (myCourse || enrolled) {
+
               navigate(`/dashboard/course/${id}`);
+
             } else {
+
               handleEnroll();
+
             }
+
           }}
-          className={`mt-6 w-full py-3 rounded-xl font-semibold transition ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 text-white"
-          }`}
+
+          className={`
+
+            mt-6
+            w-full
+            py-3
+            rounded-xl
+            font-semibold
+            transition
+
+            ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 text-white"
+            }
+
+          `}
+
         >
-          {loading
-            ? "Enrolling..."
-            : enrolled
-            ? progress === 0
+
+          {loading ? (
+
+            "Enrolling..."
+
+          ) : myCourse ? (
+
+            progress === 0
               ? "Start Learning →"
               : progress === 100
               ? "Review Course →"
               : "Continue Learning →"
-            : "Enroll Now"}
+
+          ) : enrolled ? (
+
+            "Start Learning →"
+
+          ) : (
+
+            "Enroll Now"
+
+          )}
+
         </button>
 
       </div>
 
     </div>
+
   );
+
 }
 
-export default CourseCard;2
+export default CourseCard;

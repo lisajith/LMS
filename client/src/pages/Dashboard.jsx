@@ -1,12 +1,25 @@
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 import StatCards from "../components/dashboard/StatCards";
 import MyCourses from "../components/dashboard/MyCourses";
 import LatestAnnouncements from "../components/announcements/LatestAnnouncements";
+import DashboardProgress from "../components/dashboard/DashboardProgress";
+import DashboardAttendance from "../components/dashboard/DashboardAttendance";
 import { Smile, Sun, Hand, Icon } from "lucide-react";
+
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+
+import { db } from "../firebase/firebase";
 
 function Dashboard() {
   const { user, userData } = useAuth();
+  const [progressData,setProgressData]=useState([]);
 
   const firstName =
     user?.displayName?.split(" ")[0] || "Student";
@@ -19,6 +32,60 @@ function Dashboard() {
   if (hour < 12){ greeting = "Good Morning";Icon = Sun;}
   else if (hour < 17){ greeting = "Good Afternoon";Icon = Hand;}
   else{ greeting = "Good Evening";Icon = Smile;}
+
+  
+
+  useEffect(() => {
+
+      async function loadProgress(){
+
+          if(!user) return;
+
+          const enrollments=await getDocs(
+
+              query(
+                  collection(db,"enrollments"),
+                  where("userId","==",user.uid)
+              )
+
+          );
+
+          const data=[];
+
+          for(const item of enrollments.docs){
+
+              const enroll=item.data();
+
+              const course=await getDocs(
+
+                  query(
+                      collection(db,"courses"),
+                      where("__name__","==",enroll.courseId)
+                  )
+
+              );
+
+              if(!course.empty){
+
+                  data.push({
+
+                      course:course.docs[0].data().title,
+
+                      progress:enroll.progress
+
+                  });
+
+              }
+
+          }
+
+          setProgressData(data);
+
+      }
+
+      loadProgress();
+
+  },[user]);
 
   return (
     <div className="space-y-8">
@@ -39,6 +106,15 @@ function Dashboard() {
         </p>
 
       </section>
+
+      <div className="grid lg:grid-cols-3 gap-6">
+          <DashboardAttendance />
+          <div className="lg:col-span-2">
+              <DashboardProgress
+                  data={progressData}
+              />
+          </div>
+      </div>
 
       {/* Stats */}
 

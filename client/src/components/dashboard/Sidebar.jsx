@@ -7,7 +7,8 @@ import {
   ClipboardCheck,
   Award,
   User,
-  Bell
+  Bell,
+  ClipboardList,
 } from "lucide-react";
 
 const menuItems = [
@@ -29,7 +30,7 @@ const menuItems = [
   {
     name: "Assignments",
     path: "/dashboard/assignments",
-    icon: <FileText size={20} />,
+    icon: <ClipboardList size={20} />,
   },
   {
     name: "Tests",

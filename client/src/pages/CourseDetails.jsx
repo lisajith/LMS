@@ -25,81 +25,92 @@ import {
   ChevronLeft,
   ChevronRight,
   LoaderCircle,
+  Info,
+  User,
+  Star,
+  Book,
 } from "lucide-react";
 
 function CourseDetails() {
 
   const { id } = useParams();
-
   const navigate = useNavigate();
-
   const { user } = useAuth();
-
+  const [course, setCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
-
   const [selectedLesson, setSelectedLesson] = useState(null);
-
   const [enrollment, setEnrollment] = useState(null);
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
 
     async function fetchLessons() {
+      try {
 
-      const q = query(
-        collection(db, "lessons"),
-        where("courseId", "==", id),
-        orderBy("order")
-      );
-
-      const snapshot = await getDocs(q);
-
-      const lessonList = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      setLessons(lessonList);
-
-      if (!user) {
-        setSelectedLesson(lessonList[0]);
-        return;
-      }
-
-      const enrollmentRef = doc(
-        db,
-        "enrollments",
-        `${user.uid}_${id}`
-      );
-
-      const enrollmentSnap = await getDoc(enrollmentRef);
-
-      if (!enrollmentSnap.exists()) {
-        setSelectedLesson(lessonList[0]);
-        return;
-      }
-
-      const enrollmentData = enrollmentSnap.data();
-
-      setEnrollment(enrollmentData);
-
-      if (enrollmentData.lastLesson) {
-
-        const lastLesson = lessonList.find(
-          lesson => lesson.id === enrollmentData.lastLesson
+        const courseRef = doc(db, "courses", id);
+        const courseSnap = await getDoc(courseRef);
+        if (courseSnap.exists()) {
+          setCourse({
+            id: courseSnap.id,
+            ...courseSnap.data(),
+          });
+        }
+        const q = query(
+          collection(db, "lessons"),
+          where("courseId", "==", id),
+          orderBy("order")
         );
+        const snapshot = await getDocs(q);
+        const lessonList = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setLessons(lessonList);
 
-        setSelectedLesson(
-          lastLesson || lessonList[0]
+        // No lessons found
+        if (lessonList.length === 0) {
+          return;
+        }
+
+        if (!user) {
+          setSelectedLesson(lessonList[0]);
+          return;
+        }
+        const enrollmentRef = doc(
+          db,
+          "enrollments",
+          `${user.uid}_${id}`
         );
-
-      } else {
-
-        setSelectedLesson(
-          lessonList[0]
-        );
-
+        const enrollmentSnap = await getDoc(enrollmentRef);
+        // User not enrolled yet
+        if (!enrollmentSnap.exists()) {
+          setSelectedLesson(lessonList[0]);
+          return;
+        }
+        const enrollmentData = enrollmentSnap.data();
+        setEnrollment(enrollmentData);
+        // Resume from last lesson if available,
+        // otherwise continue from the first unfinished lesson.
+        if (enrollmentData.lastLesson) {
+          const lastLesson = lessonList.find(
+            lesson => lesson.id === enrollmentData.lastLesson
+          );
+          setSelectedLesson(
+            lastLesson || lessonList[0]
+          );
+        } else {
+          const firstUnfinishedLesson = lessonList.find(
+            lesson =>
+              !enrollmentData.completedLessons?.includes(lesson.id)
+          );
+          setSelectedLesson(
+            firstUnfinishedLesson || lessonList[0]
+          );
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to load course.");
       }
-
     }
 
     fetchLessons();
@@ -140,6 +151,7 @@ function CourseDetails() {
         ),
         {
           lastLesson: previousLesson.id,
+          lastAccessedAt: serverTimestamp(),
         }
       );
 
@@ -158,7 +170,6 @@ function CourseDetails() {
     setSelectedLesson(nextLesson);
 
     if (user) {
-
       await updateDoc(
         doc(
           db,
@@ -167,9 +178,9 @@ function CourseDetails() {
         ),
         {
           lastLesson: nextLesson.id,
+          lastAccessedAt: serverTimestamp(),
         }
       );
-
     }
 
   }
@@ -208,10 +219,10 @@ function CourseDetails() {
         `${user.uid}_${id}`
       ),
       {
-        completedLessons:
-          updatedCompletedLessons,
+        completedLessons: updatedCompletedLessons,
         progress,
         lastLesson: selectedLesson.id,
+        lastAccessedAt: serverTimestamp(),
       }
     );
 
@@ -293,13 +304,58 @@ function CourseDetails() {
             {selectedLesson.title}
           </h1>
 
-          <p className="text-theme-muted mt-2">
-            Course :
-            <span className="font-medium">
-              {" "}
-              {id}
-            </span>
-          </p>
+          <div className="mt-2 flex items-center gap-2 relative">
+            <p className="text-theme-muted">
+              Course :
+              <span className="font-semibold text-theme ml-1">
+                {course?.title}
+              </span>
+            </p>
+            <button
+              onClick={() => setShowInfo(!showInfo)}
+              onMouseEnter={() => setShowInfo(true)}
+              onMouseLeave={() => setShowInfo(false)}
+              className="text-theme-muted hover:text-blue-600 transition cursor-pointer"
+            >
+              <Info size={18} />
+            </button>
+            {showInfo && (
+              <div
+                className="
+                  absolute
+                  top-8
+                  left-20
+                  z-20
+                  w-72
+                  rounded-xl
+                  card-theme
+                  border
+                  border-theme
+                  shadow-xl
+                  p-4
+                "
+              >
+                <h3 className="font-bold text-theme mb-2">
+                  {course?.title}
+                </h3>
+                <p className="text-sm text-theme-muted mb-3">
+                  {course?.description}
+                </p>
+                <div className="space-y-2 text-sm">
+                  <p className="flex gap-2">
+                    <User /> <strong>Instructor:</strong> {course?.instructor}
+                  </p>
+                  <p className="flex gap-2">
+                    <Star /> <strong>{course?.rating}</strong>/5
+                  </p>
+                  <p className="flex gap-2">
+                    <Book /> <strong>{lessons.length}</strong> Lessons
+                  </p>
+                </div>
+              </div>
+            )}
+
+          </div>
 
           <iframe
             src={selectedLesson.video}
