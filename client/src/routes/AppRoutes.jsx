@@ -76,7 +76,7 @@ function AppRoutes() {
           <Route path="assignments/:id" element={<AssignmentDetails />} />
           <Route path="tests" element={<Tests />} />
           <Route path="tests/instructions/:id" element={<TestInstructions /> }/>
-          <Route path="tests/:id" element={<TestAttempt />} />
+          <Route path="tests/attempt/:id" element={<TestAttempt />} />
           <Route path="tests/result/:id" element={<TestResult />} />
           <Route path="certificate/:id" element={<Certificate />} />
           <Route path="certificates" element={<Certificates />} />

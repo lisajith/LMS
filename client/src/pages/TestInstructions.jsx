@@ -93,7 +93,7 @@ return ( <div className="max-w-4xl mx-auto py-10 space-y-8"> <div className="car
 
     <div className="flex justify-end mt-8">
       <button
-        onClick={() => navigate(`/dashboard/tests/${id}`)}
+        onClick={() => navigate(`/dashboard/tests/attempt/${id}`)}
         className="btn-primary px-8 py-3 rounded-xl flex items-center gap-3 shadow-lg shadow-blue-500/20"
       >
         <Play size={20} />

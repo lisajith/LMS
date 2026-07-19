@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { ClipboardCheck, Search, FileX2 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
@@ -16,28 +16,51 @@ function Tests() {
   useEffect(() => {
     async function fetchTests() {
       try {
-        const q = query(
-          collection(db, "tests"),
+        if (!user) return;
 
+        // 1. Get student's enrollments
+        const enrollmentQuery = query(
+          collection(db, "enrollments"),
+          where("userId", "==", user.uid)
+        );
+
+        const enrollmentSnap = await getDocs(enrollmentQuery);
+
+        // 2. Extract enrolled course IDs
+        const enrolledCourseIds = enrollmentSnap.docs.map(
+          (doc) => doc.data().courseId
+        );
+
+        // 3. If not enrolled in any course
+        if (enrolledCourseIds.length === 0) {
+          setTests([]);
+          return;
+        }
+
+        // 4. Fetch all tests
+        const testQuery = query(
+          collection(db, "tests"),
           orderBy("createdAt", "desc")
         );
 
-        const snapshot = await getDocs(q);
+        const testSnap = await getDocs(testQuery);
 
-        const list = snapshot.docs.map((doc) => ({
-          id: doc.id,
+        // 5. Keep only tests for enrolled courses
+        const filteredTests = testSnap.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .filter((test) => enrolledCourseIds.includes(test.courseId));
 
-          ...doc.data(),
-        }));
-
-        setTests(list);
-      } catch (error) {
-        console.error("Error Fetching Tests:", error);
+        setTests(filteredTests);
+      } catch (err) {
+        console.error("Fetch Tests Error:", err);
       }
     }
 
     fetchTests();
-  }, []);
+  }, [user]);
 
   const filteredTests = tests.filter((test) => {
     const keyword = search.toLowerCase();
@@ -102,7 +125,11 @@ function Tests() {
         <div className="card-theme rounded-2xl p-16 text-center">
           <FileX2 size={60} className="mx-auto mb-5 text-theme-muted" />
 
-          <h2 className="text-2xl font-bold">No Tests Found</h2>
+          <h2 className="text-2xl font-bold mb-3">No Tests Available</h2>
+
+          <p className="text-theme-muted max-w-md mx-auto">
+            Tests will appear here only for the courses you have enrolled in.
+          </p>
         </div>
       ) : (
         <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">

@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from "../firebase/firebase";
 
 import {
   ChevronLeft,
@@ -14,8 +16,6 @@ import {
   Clock3,
   CheckCircle2,
 } from "lucide-react";
-
-import { db } from "../firebase/firebase";
 
 function getTimerKey(userId, testId) {
   return `test_timer_${userId}_${testId}`;
@@ -41,6 +41,17 @@ function TestAttempt() {
   useEffect(() => {
     async function initializeTest() {
       if (!user) return;
+      // Verify student is enrolled in this course
+      const enrollmentQuery = query(
+        collection(db, "enrollments"),
+        where("userId", "==", user.uid)
+      );
+
+      const enrollmentSnap = await getDocs(enrollmentQuery);
+
+      const enrolledCourseIds = enrollmentSnap.docs.map(
+        (doc) => doc.data().courseId
+      );
 
       try {
         // 1. Check if already submitted
@@ -71,6 +82,14 @@ function TestAttempt() {
         };
 
         setTest(data);
+
+        if (!enrolledCourseIds.includes(data.courseId)) {
+          toast.error("You are not enrolled in this course.");
+
+          navigate("/dashboard/tests", { replace: true });
+
+          return;
+        }
 
         // 3. TIMER LOGIC
         const timerKey = getTimerKey(user.uid, id);
