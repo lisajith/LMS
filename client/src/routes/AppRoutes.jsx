@@ -26,8 +26,9 @@ import Attendance from "../pages/Attendance";
 import Assignments from "../pages/Assignments";
 import AssignmentDetails from "../pages/AssignmentDetails";
 import Tests from "../pages/Tests";
-import TestResult from "../pages/TestResult";
+import TestInstructions from "../pages/TestInstructions";
 import TestAttempt from "../pages/TestAttempt";
+import TestResult from "../pages/TestResult";
 
 function AppRoutes() {
   return (
@@ -74,6 +75,7 @@ function AppRoutes() {
           <Route path="assignments" element={<Assignments />} />
           <Route path="assignments/:id" element={<AssignmentDetails />} />
           <Route path="tests" element={<Tests />} />
+          <Route path="tests/instructions/:id" element={<TestInstructions /> }/>
           <Route path="tests/:id" element={<TestAttempt />} />
           <Route path="tests/result/:id" element={<TestResult />} />
           <Route path="certificate/:id" element={<Certificate />} />

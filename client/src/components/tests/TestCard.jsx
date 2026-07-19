@@ -126,7 +126,7 @@ function TestCard({ test, user }) {
           if (status === "Completed") {
             navigate(`/dashboard/tests/result/${test.id}`);
           } else if (status === "Active") {
-            navigate(`/dashboard/tests/${test.id}`);
+            navigate(`/dashboard/tests/instructions/${test.id}`);
           }
         }}
         className="btn-primary mt-8 flex items-center justify-center gap-2 py-3 rounded-xl disabled:opacity-50"

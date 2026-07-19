@@ -7,8 +7,9 @@ import App from "./App.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import { BrowserRouter } from "react-router-dom";
 
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 
 import { ThemeProvider } from "./context/ThemeContext";
 import "./styles/global.css";
@@ -20,13 +21,10 @@ createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <BrowserRouter>
           <App />
-          <ToastContainer
-            position="top-right"
-            autoClose={2000}
-            theme="colored"
-          />
+          <ToastContainer position="top-right" autoClose={2000} theme="colored" />
+          <Toaster position="top-center" />
         </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
     </ThemeProvider>
   </StrictMode>
 );
