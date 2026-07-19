@@ -9,7 +9,7 @@ import {
   query,
   where,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
@@ -58,10 +58,10 @@ function Navbar() {
     );
     const readSnapshot = await getDocs(readQuery);
     const alreadyRead = readSnapshot.docs.map(
-      doc => doc.data().announcementId
+      (doc) => doc.data().announcementId
     );
     const unreadAnnouncements = announcements.filter(
-      item => !alreadyRead.includes(item.id)
+      (item) => !alreadyRead.includes(item.id)
     );
     for (const item of unreadAnnouncements) {
       await addDoc(collection(db, "announcementReads"), {
@@ -74,70 +74,55 @@ function Navbar() {
   }
 
   useEffect(() => {
-      async function fetchAnnouncements() {
-        const announcementQuery = query(
-          collection(db, "announcements"),
-          orderBy("createdAt", "desc"),
-          limit(5)
-        );
-        const announcementSnapshot = await getDocs(announcementQuery);
-        const announcementList = announcementSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setAnnouncements(announcementList);
-        const readQuery = query(
-          collection(db, "announcementReads"),
-          where("userId", "==", user.uid)
-        );
-        const readSnapshot = await getDocs(readQuery);
-        const readIds = readSnapshot.docs.map(
-          doc => doc.data().announcementId
-        );
-        const unread = announcementList.filter(
-          item => !readIds.includes(item.id)
-        );
-        setUnreadCount(unread.length);
-      }
-      if (user) {
-        fetchAnnouncements();
-      }
-    }, [user]);
+    async function fetchAnnouncements() {
+      const announcementQuery = query(
+        collection(db, "announcements"),
+        orderBy("createdAt", "desc"),
+        limit(5)
+      );
+      const announcementSnapshot = await getDocs(announcementQuery);
+      const announcementList = announcementSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAnnouncements(announcementList);
+      const readQuery = query(
+        collection(db, "announcementReads"),
+        where("userId", "==", user.uid)
+      );
+      const readSnapshot = await getDocs(readQuery);
+      const readIds = readSnapshot.docs.map((doc) => doc.data().announcementId);
+      const unread = announcementList.filter(
+        (item) => !readIds.includes(item.id)
+      );
+      setUnreadCount(unread.length);
+    }
+    if (user) {
+      fetchAnnouncements();
+    }
+  }, [user]);
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
 
-    return () =>
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside
-      );
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <nav className="sticky top-0 z-50 opacity-90 card-theme border-b border-theme shadow-sm">
       <div className="max-w-7xl mx-auto h-20 px-8 flex items-center justify-between">
-        
         {/* Logo */}
         <Link
           to={user ? "/dashboard" : "/"}
           className="flex items-center gap-3"
         >
-          <GraduationCap
-            size={34}
-            style={{ color: "var(--primary)" }} 
-          />
-          <span className="text-2xl font-bold text-theme">
-            LMS Portal
-          </span>
+          <GraduationCap size={34} style={{ color: "var(--primary)" }} />
+          <span className="text-2xl font-bold text-theme">SyVa</span>
         </Link>
 
         {/* Navigation Links */}
@@ -146,15 +131,11 @@ function Navbar() {
             to="/"
             className={({ isActive }) =>
               `flex items-center gap-2 ${
-                isActive
-                  ? "font-semibold"
-                  : "text-theme transition"
+                isActive ? "font-semibold" : "text-theme transition"
               }`
             }
             style={({ isActive }) =>
-              isActive
-                ? { color: "var(--primary)" }
-                : {}
+              isActive ? { color: "var(--primary)" } : {}
             }
           >
             <House size={18} />
@@ -165,15 +146,11 @@ function Navbar() {
             to="/courses"
             className={({ isActive }) =>
               `flex items-center gap-2 ${
-                isActive
-                  ? "font-semibold"
-                  : "text-theme transition"
+                isActive ? "font-semibold" : "text-theme transition"
               }`
             }
             style={({ isActive }) =>
-              isActive
-                ? { color: "var(--primary)" }
-                : {}
+              isActive ? { color: "var(--primary)" } : {}
             }
           >
             <BookOpen size={18} />
@@ -200,15 +177,11 @@ function Navbar() {
             to="/about"
             className={({ isActive }) =>
               `flex items-center gap-2 ${
-                isActive
-                  ? "font-semibold"
-                  : "text-theme transition"
+                isActive ? "font-semibold" : "text-theme transition"
               }`
             }
             style={({ isActive }) =>
-              isActive
-                ? { color: "var(--primary)" }
-                : {}
+              isActive ? { color: "var(--primary)" } : {}
             }
           >
             <Info size={18} />
@@ -219,15 +192,11 @@ function Navbar() {
             to="/contact"
             className={({ isActive }) =>
               `flex items-center gap-2 ${
-                isActive
-                  ? "font-semibold"
-                  : "text-theme transition"
+                isActive ? "font-semibold" : "text-theme transition"
               }`
             }
             style={({ isActive }) =>
-              isActive
-                ? { color: "var(--primary)" }
-                : {}
+              isActive ? { color: "var(--primary)" } : {}
             }
           >
             <Mail size={18} />
@@ -260,10 +229,7 @@ function Navbar() {
                   onClick={handleNotificationClick}
                   className="relative p-2 rounded-xl hover-theme transition"
                 >
-                  <Bell
-                    size={21}
-                    className="text-theme-muted"
-                  />
+                  <Bell size={21} className="text-theme-muted" />
                   {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
                       {unreadCount}
@@ -276,11 +242,9 @@ function Navbar() {
                       Latest Announcements
                     </div>
                     {announcements.length === 0 ? (
-                      <p className="p-5 text-theme-muted">
-                        No announcements
-                      </p>
+                      <p className="p-5 text-theme-muted">No announcements</p>
                     ) : (
-                      announcements.map(item => (
+                      announcements.map((item) => (
                         <button
                           key={item.id}
                           onClick={() => {
@@ -289,9 +253,7 @@ function Navbar() {
                           }}
                           className="w-full text-left px-5 py-4 hover-theme transition border-b border-theme"
                         >
-                          <p className="font-semibold">
-                            {item.title}
-                          </p>
+                          <p className="font-semibold">{item.title}</p>
                           <p className="text-sm text-theme-muted mt-1">
                             {item.message}
                           </p>
@@ -326,7 +288,6 @@ function Navbar() {
                     ) : (
                       <UserCircle2 className="w-full h-full text-blue-500" />
                     )}
-
                   </div>
                   <span className="font-medium text-theme">
                     {userData?.name?.split(" ")[0] || "Loading..."}
@@ -348,9 +309,7 @@ function Navbar() {
                           {userData?.name}
                         </h3>
 
-                        <p className="text-sm text-theme-muted">
-                          {user.email}
-                        </p>
+                        <p className="text-sm text-theme-muted">{user.email}</p>
                       </div>
 
                       <button
@@ -382,7 +341,6 @@ function Navbar() {
                         <LogOut size={18} />
                         Logout
                       </button>
-
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -390,7 +348,6 @@ function Navbar() {
             </>
           )}
         </div>
-
       </div>
     </nav>
   );

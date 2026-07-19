@@ -163,7 +163,7 @@ function Contact() {
 
               <p className="text-theme-muted leading-7">
                 Whether you're facing a technical issue, need help accessing a
-                course, or have ideas to improve the LMS, we're always happy to
+                course, or have ideas to improve the SyVa, we're always happy to
                 hear from you.
               </p>
             </div>

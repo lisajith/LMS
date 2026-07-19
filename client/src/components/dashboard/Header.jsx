@@ -13,16 +13,10 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-50 h-20 card-theme border-b border-theme flex items-center justify-between px-8">
-      
       {/* Left Area */}
-      <Link
-        to="/"
-        className="flex items-center gap-3"
-      >
+      <Link to="/" className="flex items-center gap-3">
         <GraduationCap className="text-blue-600" size={34} />
-        <h1 className="text-2xl font-bold text-theme">
-          LMS Portal
-        </h1>
+        <h1 className="text-2xl font-bold text-theme">SyVa</h1>
       </Link>
 
       {/* Right Area */}
@@ -39,7 +33,6 @@ function Header() {
           Logout
         </button>
       </div>
-
     </header>
   );
 }
