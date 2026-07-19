@@ -9,6 +9,8 @@ import {
   User,
   Bell,
   ClipboardList,
+  Code2,
+  Calendar,
 } from "lucide-react";
 
 const menuItems = [
@@ -28,6 +30,11 @@ const menuItems = [
     icon: <CalendarCheck size={20} />,
   },
   {
+    name: "Upcoming Classes",
+    path: "/dashboard/classes",
+    icon: <Calendar size={20} />,
+  },
+  {
     name: "Assignments",
     path: "/dashboard/assignments",
     icon: <ClipboardList size={20} />,
@@ -36,6 +43,11 @@ const menuItems = [
     name: "Tests",
     path: "/dashboard/tests",
     icon: <ClipboardCheck size={20} />,
+  },
+  {
+    name: "Practice",
+    path: "/dashboard/practice",
+    icon: <Code2 size={20} />,
   },
   {
     name: "Certificates",
@@ -59,12 +71,8 @@ function Sidebar() {
     <aside className="fixed top-20 left-0 w-72 h-[calc(100vh-5rem)] card-theme border-r border-theme overflow-y-auto">
       <div className="px-5 py-6">
         <nav className="space-y-2">
-          
           {menuItems.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.path}
-            >
+            <NavLink key={item.name} to={item.path}>
               {({ isActive }) => (
                 <div
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${
@@ -79,7 +87,6 @@ function Sidebar() {
               )}
             </NavLink>
           ))}
-
         </nav>
       </div>
     </aside>

@@ -29,6 +29,8 @@ import Tests from "../pages/Tests";
 import TestInstructions from "../pages/TestInstructions";
 import TestAttempt from "../pages/TestAttempt";
 import TestResult from "../pages/TestResult";
+import Practice from "../pages/Practice";
+import UpcomingClasses from "../pages/UpcomingClasses";
 
 function AppRoutes() {
   return (
@@ -66,20 +68,22 @@ function AppRoutes() {
           }
         >
           <Route index element={<Dashboard />} />
-          <Route path="announcements" element={<Announcements />} />
           <Route path="courses" element={<DashboardCourses />} />
           <Route path="course/:id" element={<CourseDetails />} />
           <Route path="notes" element={<Notes />} />
           <Route path="course/:id/notes" element={<CourseNotes />} />
           <Route path="attendance" element={<Attendance />} />
+          <Route path="classes" element={<UpcomingClasses />} />
           <Route path="assignments" element={<Assignments />} />
           <Route path="assignments/:id" element={<AssignmentDetails />} />
           <Route path="tests" element={<Tests />} />
-          <Route path="tests/instructions/:id" element={<TestInstructions /> }/>
+          <Route path="tests/instructions/:id" element={<TestInstructions />} />
           <Route path="tests/attempt/:id" element={<TestAttempt />} />
           <Route path="tests/result/:id" element={<TestResult />} />
+          <Route path="practice" element={<Practice />} />
           <Route path="certificate/:id" element={<Certificate />} />
           <Route path="certificates" element={<Certificates />} />
+          <Route path="announcements" element={<Announcements />} />
           <Route path="profile" element={<Profile />} />
         </Route>
       </Route>
