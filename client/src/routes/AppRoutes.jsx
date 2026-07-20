@@ -32,6 +32,21 @@ import TestResult from "../pages/TestResult";
 import Practice from "../pages/Practice";
 import UpcomingClasses from "../pages/UpcomingClasses";
 
+{/*Admin Imports*/}
+
+import AdminRoute from "./AdminRoute";
+import AdminLayout from "../components/layout/AdminLayout";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminCourses from "../pages/admin/AdminCourses";
+import AdminLessons from "../pages/admin/AdminLessons";
+import AdminAssignments from '../pages/admin/AdminAssignments';
+import CreateAssignment from '../pages/admin/CreateAssignment';
+import EditAssignment from "../pages/admin/EditAssignment";
+import AdminTests from '../pages/admin/AdminTests';
+import CreateTest from '../pages/admin/CreateTest';
+import EditTest from '../pages/admin/EditTest';
+import TestSubmissions from '../pages/admin/TestSubmissions';
+
 function AppRoutes() {
   return (
     <Routes>
@@ -67,6 +82,7 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         >
+
           <Route index element={<Dashboard />} />
           <Route path="courses" element={<DashboardCourses />} />
           <Route path="course/:id" element={<CourseDetails />} />
@@ -85,8 +101,32 @@ function AppRoutes() {
           <Route path="certificates" element={<Certificates />} />
           <Route path="announcements" element={<Announcements />} />
           <Route path="profile" element={<Profile />} />
+
         </Route>
       </Route>
+
+        {/* Admin */}
+
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }
+        >
+
+          <Route index element={<AdminDashboard />} />
+          <Route path="courses" element={<AdminCourses />} />
+          <Route path="lessons" element={<AdminLessons />} />
+          <Route path="assignments" element={<AdminAssignments />} />
+          <Route path="assignments/create" element={<CreateAssignment />} />
+          <Route path="assignments/edit/:id" element={<EditAssignment />} />
+          <Route path="tests" element={<AdminTests />} />
+          <Route path="tests/create" element={<CreateTest />} />
+          <Route path="tests/edit/:id" element={<EditTest />} />
+          <Route path="tests/submissions/:id" element={<TestSubmissions />} />
+        </Route>
     </Routes>
   );
 }

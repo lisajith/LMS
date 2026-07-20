@@ -8,20 +8,21 @@ function MainLayout() {
 
   const isDashboard = location.pathname.startsWith("/dashboard");
 
+  // Detect exam route
+  const isExamMode = location.pathname.includes("/dashboard/tests/attempt/");
+
   return (
     <div className="min-h-screen flex flex-col bg-theme">
-
-      {/* Shared Navbar */}
-      <Navbar />
+      {/* Hide Navbar during exam */}
+      {!isExamMode && <Navbar />}
 
       {/* Page Content */}
       <main className="flex-1">
         <Outlet />
       </main>
 
-      {/* Footer only for public pages */}
-      {!isDashboard && <Footer />}
-
+      {/* Footer only for public pages and not during exam */}
+      {!isDashboard && !isExamMode && <Footer />}
     </div>
   );
 }

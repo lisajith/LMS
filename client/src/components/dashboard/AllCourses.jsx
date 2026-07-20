@@ -3,41 +3,25 @@ import { useAuth } from "../../context/AuthContext";
 import CourseCard from "./CourseCard";
 import { db } from "../../firebase/firebase";
 
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
-import {
-  LoaderCircle,
-  Search,
-  BookOpen,
-  FolderOpen,
-} from "lucide-react";
+import { LoaderCircle, Search, BookOpen, FolderOpen } from "lucide-react";
 
 function AllCourses() {
-
   const { user } = useAuth();
 
   const [courses, setCourses] = useState([]);
-  const [lessonCounts, setLessonCounts] = useState({});
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
   async function fetchData() {
-
     try {
-
       // ==========================
       // Fetch Courses
       // ==========================
 
-      const courseSnapshot = await getDocs(
-        collection(db, "courses")
-      );
+      const courseSnapshot = await getDocs(collection(db, "courses"));
 
       const courseList = courseSnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -47,105 +31,54 @@ function AllCourses() {
       setCourses(courseList);
 
       // ==========================
-      // Fetch Lesson Counts
-      // ==========================
-
-      const lessonSnapshot = await getDocs(
-        collection(db, "lessons")
-      );
-
-      const counts = {};
-
-      lessonSnapshot.forEach((doc) => {
-
-        const lesson = doc.data();
-
-        counts[lesson.courseId] =
-          (counts[lesson.courseId] || 0) + 1;
-
-      });
-
-      setLessonCounts(counts);
-
-      // ==========================
       // Fetch User Enrollments
       // ==========================
 
       if (user) {
-
         const enrollmentQuery = query(
           collection(db, "enrollments"),
           where("userId", "==", user.uid)
         );
 
-        const enrollmentSnapshot =
-          await getDocs(enrollmentQuery);
+        const enrollmentSnapshot = await getDocs(enrollmentQuery);
 
-        const enrolledIds =
-          enrollmentSnapshot.docs.map(
-            (doc) => doc.data().courseId
-          );
+        const enrolledIds = enrollmentSnapshot.docs.map(
+          (doc) => doc.data().courseId
+        );
 
         setEnrolledCourses(enrolledIds);
-
       } else {
-
         setEnrolledCourses([]);
-
       }
-
     } catch (error) {
-
       console.error(error);
-
     } finally {
-
       setLoading(false);
-
     }
-
   }
 
   useEffect(() => {
-
     fetchData();
-
   }, [user]);
 
   if (loading) {
-
     return (
-
       <div className="flex justify-center items-center py-24">
-
-        <p className="text-theme-muted text-lg">
-          Loading courses...
-        </p>
-
+        <p className="text-theme-muted text-lg">Loading courses...</p>
       </div>
-
     );
-
   }
 
   if (courses.length === 0) {
-
     return (
-
       <div className="card-theme rounded-2xl p-12 text-center">
-
-        <h2 className="text-2xl font-bold text-theme">
-          No Courses Available
-        </h2>
+        <h2 className="text-2xl font-bold text-theme">No Courses Available</h2>
 
         <p className="mt-3 text-theme-muted">
           New courses will appear here soon.
         </p>
-
       </div>
-
     );
-
   }
 
   const filteredCourses = courses.filter((course) => {
@@ -188,13 +121,8 @@ function AllCourses() {
 
       {filteredCourses.length === 0 ? (
         <div className="card-theme rounded-2xl p-16 text-center">
-          <FolderOpen
-            size={55}
-            className="mx-auto mb-5 text-theme-muted"
-          />
-          <h2 className="text-2xl font-bold mb-2">
-            No Courses Found
-          </h2>
+          <FolderOpen size={55} className="mx-auto mb-5 text-theme-muted" />
+          <h2 className="text-2xl font-bold mb-2">No Courses Found</h2>
           <p className="text-theme-muted">
             Try searching with another course or instructor.
           </p>
@@ -205,7 +133,7 @@ function AllCourses() {
             <CourseCard
               key={course.id}
               {...course}
-              lessonCount={lessonCounts[course.id] || 0}
+              lessonCount={course.lessonsCount || 0}
               enrolled={enrolledCourses.includes(course.id)}
               refreshCourses={fetchData}
             />
@@ -213,9 +141,7 @@ function AllCourses() {
         </div>
       )}
     </>
-
   );
-
 }
 
 export default AllCourses;

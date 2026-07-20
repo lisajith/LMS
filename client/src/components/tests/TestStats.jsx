@@ -7,13 +7,38 @@ function TestStats({ tests }) {
   let upcoming = 0;
   let ended = 0;
 
-  tests.forEach((test) => {
-    const start = test.startDate?.toDate();
-    const end = test.endDate?.toDate();
+  function parseDate(value) {
+    if (!value) return null;
 
-    if (now < start) {
+    if (typeof value.toDate === "function") {
+      return value.toDate();
+    }
+
+    if (value.seconds) {
+      return new Date(value.seconds * 1000);
+    }
+
+    if (value instanceof Date) {
+      return value;
+    }
+
+    return new Date(value);
+  }
+
+  tests.forEach((test) => {
+    const start = test.startDate?.toDate
+      ? test.startDate.toDate()
+      : new Date(test.startDate);
+
+    const end = test.endDate?.toDate
+      ? test.endDate.toDate()
+      : new Date(test.endDate);
+
+    if (!start || !end || isNaN(start) || isNaN(end)) return;
+
+    if (start && now < start) {
       upcoming++;
-    } else if (now > end) {
+    } else if (end && now > end) {
       ended++;
     } else {
       active++;

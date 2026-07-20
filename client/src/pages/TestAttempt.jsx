@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 
 import {
@@ -82,6 +82,14 @@ function TestAttempt() {
         };
 
         setTest(data);
+
+        if (data.isPublished !== true) {
+          toast.error("This test is not available.");
+
+          navigate("/dashboard/tests", { replace: true });
+
+          return;
+        }
 
         if (!enrolledCourseIds.includes(data.courseId)) {
           toast.error("You are not enrolled in this course.");
@@ -170,8 +178,10 @@ function TestAttempt() {
     const finalAnswers = latestAnswersRef.current;
 
     test.questions.forEach((question, index) => {
+      const marks = Number(question.marks || 1);
+
       if (finalAnswers[index] === question.answer) {
-        obtainedMarks += question.marks || 1;
+        obtainedMarks += marks;
         correctQuestions++;
       }
     });
@@ -185,7 +195,10 @@ function TestAttempt() {
         score: correctQuestions,
         obtainedMarks,
         totalQuestions: test.questions.length,
-        totalMarks: test.questions.reduce((sum, q) => sum + (q.marks || 1), 0),
+        totalMarks: test.questions.reduce(
+          (sum, q) => sum + Number(q.marks || 1),
+          0
+        ),
         submittedAt: serverTimestamp(),
         status: "Completed",
       });
@@ -540,8 +553,8 @@ function TestAttempt() {
 
               ${
                 answers[currentQuestion] === option
-                  ? "border-blue-600 bg-blue-500/10 shadow-lg shadow-blue-500/10"
-                  : "border-theme hover:bg-theme-hover"
+                  ? "border-blue-600 bg-linear-to-r from-blue-500/10 to-blue-600/10 shadow-lg shadow-blue-500/20 ring-2 ring-blue-500/20"
+                  : "border-theme hover:bg-theme-hover hover:border-blue-400"
               }
 
             `}
@@ -584,7 +597,26 @@ function TestAttempt() {
               {/* Option Text */}
               <div className="flex-1">
                 <div className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-sm font-bold text-theme-muted">
+                  <span
+                    className={`
+                      w-8
+                      h-8
+                      rounded-lg
+                      flex
+                      items-center
+                      justify-center
+                      text-sm
+                      font-bold
+                      transition-all
+                      duration-300
+                      ${
+                        answers[currentQuestion] === option
+                          ? "bg-blue-600 text-white shadow-md"
+                          : "primary-soft primary-text border border-theme"
+                      }
+
+                    `}
+                  >
                     {String.fromCharCode(65 + index)}
                   </span>
 

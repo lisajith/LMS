@@ -96,7 +96,7 @@ SELECT * FROM students;`,
   html: `<!DOCTYPE html>
 <html>
 <head>
-  <title>SmartLMS</title>
+  <title>SyVa</title>
   <style>
     body{
       font-family: Arial;
@@ -110,7 +110,7 @@ SELECT * FROM students;`,
   </style>
 </head>
 <body>
-  <h1>Hello SmartLMS</h1>
+  <h1>Hello SyVa</h1>
   <p>Live preview is working!</p>
 </body>
 </html>`,
@@ -298,7 +298,7 @@ function Practice() {
             </div>
 
             <div>
-              <h1 className="text-3xl font-bold">SmartLMS Code Lab</h1>
+              <h1 className="text-3xl font-bold">SyVa Code Lab</h1>
 
               <p className="text-theme-muted">
                 Practice coding in multiple languages with live execution

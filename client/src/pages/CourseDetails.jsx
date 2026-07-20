@@ -32,7 +32,6 @@ import {
 } from "lucide-react";
 
 function CourseDetails() {
-
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -43,21 +42,30 @@ function CourseDetails() {
   const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
-
     async function fetchLessons() {
       try {
-
         const courseRef = doc(db, "courses", id);
         const courseSnap = await getDoc(courseRef);
+
         if (courseSnap.exists()) {
+          const data = courseSnap.data();
+
           setCourse({
             id: courseSnap.id,
-            ...courseSnap.data(),
+            title: data.title || "Untitled Course",
+            description: data.description || "",
+            instructor: data.instructor || "NA",
+            rating: data.rating || 0,
+            thumbnail: data.thumbnail || "",
+            level: data.level || "Beginner",
+            duration: data.duration || "0",
+            studentsCount: data.studentsCount || 0,
           });
         }
         const q = query(
           collection(db, "lessons"),
           where("courseId", "==", id),
+          where("isPublished", "==", true),
           orderBy("order")
         );
         const snapshot = await getDocs(q);
@@ -76,11 +84,7 @@ function CourseDetails() {
           setSelectedLesson(lessonList[0]);
           return;
         }
-        const enrollmentRef = doc(
-          db,
-          "enrollments",
-          `${user.uid}_${id}`
-        );
+        const enrollmentRef = doc(db, "enrollments", `${user.uid}_${id}`);
         const enrollmentSnap = await getDoc(enrollmentRef);
         // User not enrolled yet
         if (!enrollmentSnap.exists()) {
@@ -93,19 +97,14 @@ function CourseDetails() {
         // otherwise continue from the first unfinished lesson.
         if (enrollmentData.lastLesson) {
           const lastLesson = lessonList.find(
-            lesson => lesson.id === enrollmentData.lastLesson
+            (lesson) => lesson.id === enrollmentData.lastLesson
           );
-          setSelectedLesson(
-            lastLesson || lessonList[0]
-          );
+          setSelectedLesson(lastLesson || lessonList[0]);
         } else {
           const firstUnfinishedLesson = lessonList.find(
-            lesson =>
-              !enrollmentData.completedLessons?.includes(lesson.id)
+            (lesson) => !enrollmentData.completedLessons?.includes(lesson.id)
           );
-          setSelectedLesson(
-            firstUnfinishedLesson || lessonList[0]
-          );
+          setSelectedLesson(firstUnfinishedLesson || lessonList[0]);
         }
       } catch (err) {
         console.error(err);
@@ -114,92 +113,51 @@ function CourseDetails() {
     }
 
     fetchLessons();
-
   }, [id, user]);
 
   const currentIndex = selectedLesson
-    ? lessons.findIndex(
-        lesson => lesson.id === selectedLesson.id
-      )
+    ? lessons.findIndex((lesson) => lesson.id === selectedLesson.id)
     : -1;
 
   const isCompleted =
-    selectedLesson &&
-    enrollment?.completedLessons?.includes(
-      selectedLesson.id
-    );
+    selectedLesson && enrollment?.completedLessons?.includes(selectedLesson.id);
 
-  const isLastLesson =
-    currentIndex === lessons.length - 1;
+  const isLastLesson = currentIndex === lessons.length - 1;
 
   async function handlePrevious() {
-
     if (currentIndex <= 0) return;
 
-    const previousLesson =
-      lessons[currentIndex - 1];
+    const previousLesson = lessons[currentIndex - 1];
 
     setSelectedLesson(previousLesson);
 
     if (user) {
-
-      await updateDoc(
-        doc(
-          db,
-          "enrollments",
-          `${user.uid}_${id}`
-        ),
-        {
-          lastLesson: previousLesson.id,
-          lastAccessedAt: serverTimestamp(),
-        }
-      );
-
+      await updateDoc(doc(db, "enrollments", `${user.uid}_${id}`), {
+        lastLesson: previousLesson.id,
+        lastAccessedAt: serverTimestamp(),
+      });
     }
-
   }
 
   async function handleNext() {
+    if (currentIndex >= lessons.length - 1) return;
 
-    if (currentIndex >= lessons.length - 1)
-      return;
-
-    const nextLesson =
-      lessons[currentIndex + 1];
+    const nextLesson = lessons[currentIndex + 1];
 
     setSelectedLesson(nextLesson);
 
     if (user) {
-      await updateDoc(
-        doc(
-          db,
-          "enrollments",
-          `${user.uid}_${id}`
-        ),
-        {
-          lastLesson: nextLesson.id,
-          lastAccessedAt: serverTimestamp(),
-        }
-      );
+      await updateDoc(doc(db, "enrollments", `${user.uid}_${id}`), {
+        lastLesson: nextLesson.id,
+        lastAccessedAt: serverTimestamp(),
+      });
     }
-
   }
 
   async function handleCompleteLesson() {
+    if (!user || !selectedLesson || !enrollment) return;
 
-    if (
-      !user ||
-      !selectedLesson ||
-      !enrollment
-    )
-      return;
-
-    if (
-      enrollment.completedLessons.includes(
-        selectedLesson.id
-      )
-    )
-      return;
+    if (enrollment.completedLessons.includes(selectedLesson.id)) return;
 
     const updatedCompletedLessons = [
       ...enrollment.completedLessons,
@@ -207,29 +165,19 @@ function CourseDetails() {
     ];
 
     const progress = Math.round(
-      (updatedCompletedLessons.length /
-        lessons.length) *
-        100
+      (updatedCompletedLessons.length / lessons.length) * 100
     );
 
-    await updateDoc(
-      doc(
-        db,
-        "enrollments",
-        `${user.uid}_${id}`
-      ),
-      {
-        completedLessons: updatedCompletedLessons,
-        progress,
-        lastLesson: selectedLesson.id,
-        lastAccessedAt: serverTimestamp(),
-      }
-    );
+    await updateDoc(doc(db, "enrollments", `${user.uid}_${id}`), {
+      completedLessons: updatedCompletedLessons,
+      progress,
+      lastLesson: selectedLesson.id,
+      lastAccessedAt: serverTimestamp(),
+    });
 
-    setEnrollment(prev => ({
+    setEnrollment((prev) => ({
       ...prev,
-      completedLessons:
-        updatedCompletedLessons,
+      completedLessons: updatedCompletedLessons,
       progress,
       lastLesson: selectedLesson.id,
     }));
@@ -237,72 +185,40 @@ function CourseDetails() {
     toast.success("Lesson Completed");
 
     if (!isLastLesson) {
-
-      setSelectedLesson(
-        lessons[currentIndex + 1]
-      );
-
+      setSelectedLesson(lessons[currentIndex + 1]);
     }
-
   }
 
   if (!selectedLesson) {
-
     return (
-
       <div className="p-10">
-
         <div className="flex justify-center items-center gap-3 py-20">
+          <LoaderCircle size={30} className="animate-spin primary-text" />
 
-          <LoaderCircle
-            size={30}
-            className="animate-spin primary-text"
-          />
-
-          <p className="text-theme-muted">
-            Loading lessons...
-          </p>
-
+          <p className="text-theme-muted">Loading lessons...</p>
         </div>
-
       </div>
-
     );
-
   }
-    return (
-
+  return (
     <div className="grid lg:grid-cols-4 gap-8">
-
       {/* Sidebar */}
 
       <LessonSidebar
         lessons={lessons}
         selectedLesson={selectedLesson}
         setSelectedLesson={setSelectedLesson}
-        completedLessons={
-          enrollment?.completedLessons || []
-        }
-        certificateUnlocked={
-          enrollment?.certificateUnlocked || false
-        }
+        completedLessons={enrollment?.completedLessons || []}
+        certificateUnlocked={enrollment?.certificateUnlocked || false}
         courseId={id}
-        courseName={
-          selectedLesson?.courseName ||
-          enrollment?.courseName ||
-          "Course"
-        }
+        courseName={course?.title || "Course"}
       />
 
       {/* Lesson Content */}
 
       <div className="lg:col-span-3">
-
         <div className="card-theme rounded-2xl shadow-md p-8">
-
-          <h1 className="text-3xl font-bold">
-            {selectedLesson.title}
-          </h1>
+          <h1 className="text-3xl font-bold">{selectedLesson.title}</h1>
 
           <div className="mt-2 flex items-center gap-2 relative">
             <p className="text-theme-muted">
@@ -335,9 +251,7 @@ function CourseDetails() {
                   p-4
                 "
               >
-                <h3 className="font-bold text-theme mb-2">
-                  {course?.title}
-                </h3>
+                <h3 className="font-bold text-theme mb-2">{course?.title}</h3>
                 <p className="text-sm text-theme-muted mb-3">
                   {course?.description}
                 </p>
@@ -354,11 +268,10 @@ function CourseDetails() {
                 </div>
               </div>
             )}
-
           </div>
 
           <iframe
-            src={selectedLesson.video}
+            src={selectedLesson.videoUrl || selectedLesson.video}
             title={selectedLesson.title}
             allowFullScreen
             className="w-full aspect-video rounded-xl mt-6"
@@ -379,146 +292,83 @@ function CourseDetails() {
 
             `}
           >
-
             {isCompleted ? (
-
               <>
-                <CheckCircle2
-                  size={18}
-                  className="inline mr-2"
-                />
-
+                <CheckCircle2 size={18} className="inline mr-2" />
                 Completed
-
               </>
-
             ) : (
-
-              <>
-                Complete Lesson
-              </>
-
+              <>Complete Lesson</>
             )}
-
           </button>
 
           {/* Navigation */}
 
           <div className="mt-10 flex justify-between">
-
             <button
               onClick={handlePrevious}
               disabled={currentIndex === 0}
               className="flex items-center gap-2 px-6 py-3 rounded-xl card-theme hover-theme disabled:opacity-50"
             >
-
               <ChevronLeft size={18} />
-
               Previous Lesson
-
             </button>
 
             <button
-
               onClick={async () => {
-
                 if (
                   isLastLesson &&
-                  enrollment?.completedLessons?.includes(
-                    selectedLesson.id
-                  )
+                  enrollment?.completedLessons?.includes(selectedLesson.id)
                 ) {
+                  await updateDoc(doc(db, "enrollments", `${user.uid}_${id}`), {
+                    completed: true,
 
-                  await updateDoc(
-                    doc(
-                      db,
-                      "enrollments",
-                      `${user.uid}_${id}`
-                    ),
-                    {
+                    certificateUnlocked: true,
 
-                      completed: true,
-
-                      certificateUnlocked: true,
-
-                      completedAt: serverTimestamp(),
-
-                    }
-                  );
+                    completedAt: serverTimestamp(),
+                  });
 
                   setEnrollment((prev) => ({
-
                     ...prev,
 
                     completed: true,
 
                     certificateUnlocked: true,
-
                   }));
 
-                  toast.success(
-                    "🎉 Congratulations! Course Completed!"
-                  );
+                  toast.success("🎉 Congratulations! Course Completed!");
 
-                  navigate(
-                    `/dashboard/certificate/${id}`
-                  );
+                  navigate(`/dashboard/certificate/${id}`);
 
                   return;
-
                 }
 
                 handleNext();
-
               }}
-
               disabled={
                 currentIndex === lessons.length - 1 &&
                 !(
                   isLastLesson &&
-                  enrollment?.completedLessons?.includes(
-                    selectedLesson.id
-                  )
+                  enrollment?.completedLessons?.includes(selectedLesson.id)
                 )
               }
-
               className="flex items-center gap-2 px-6 py-3 rounded-xl btn-primary disabled:opacity-50"
-
             >
-
               {isLastLesson &&
-              enrollment?.completedLessons?.includes(
-                selectedLesson.id
-              ) ? (
-
-                <>
-                  🏆 Complete Course
-                </>
-
+              enrollment?.completedLessons?.includes(selectedLesson.id) ? (
+                <>🏆 Complete Course</>
               ) : (
-
                 <>
-
                   Next Lesson
-
                   <ChevronRight size={18} />
-
                 </>
-
               )}
-
             </button>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   );
-
 }
 
 export default CourseDetails;

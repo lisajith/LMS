@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 
 import {
@@ -25,6 +25,8 @@ import {
   Settings,
   LogOut,
   ChevronDown,
+  Menu,
+  X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -42,6 +44,9 @@ function Navbar() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [announcements, setAnnouncements] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+
+  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   async function handleLogout() {
     await signOut(auth);
@@ -113,6 +118,10 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
   return (
     <nav className="sticky top-0 z-50 opacity-90 card-theme border-b border-theme shadow-sm">
       <div className="max-w-7xl mx-auto h-20 px-8 flex items-center justify-between">
@@ -125,8 +134,20 @@ function Navbar() {
           <span className="text-2xl font-bold text-theme">SyVa</span>
         </Link>
 
+        {/* Mobile Hamburger */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="lg:hidden w-12 h-12 rounded-2xl card-theme border border-theme shadow-lg flex items-center justify-center hover:scale-105 transition-all duration-300"
+        >
+          {mobileMenuOpen ? (
+            <X size={22} className="primary-text" />
+          ) : (
+            <Menu size={22} className="primary-text" />
+          )}
+        </button>
+
         {/* Navigation Links */}
-        <div className="flex items-center gap-7">
+        <div className="hidden lg:flex items-center gap-7">
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -205,7 +226,7 @@ function Navbar() {
         </div>
 
         {/* Right Side Controls */}
-        <div className="flex items-center gap-5">
+        <div className="hidden lg:flex items-center gap-5">
           {!user ? (
             <>
               <NavLink
@@ -349,6 +370,107 @@ function Navbar() {
           )}
         </div>
       </div>
+      {/* Mobile Navigation Drawer */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden border-t border-theme card-theme shadow-xl"
+          >
+            <div className="px-6 py-6 space-y-3">
+              <NavLink
+                to="/"
+                className="flex items-center gap-3 px-4 py-3 rounded-2xl hover-theme transition text-theme font-medium"
+              >
+                <House size={20} />
+                Home
+              </NavLink>
+
+              <NavLink
+                to="/courses"
+                className="flex items-center gap-3 px-4 py-3 rounded-2xl hover-theme transition text-theme font-medium"
+              >
+                <BookOpen size={20} />
+                Courses
+              </NavLink>
+
+              {user && (
+                <NavLink
+                  to="/dashboard"
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl hover-theme transition text-theme font-medium"
+                >
+                  <LayoutDashboard size={20} />
+                  Dashboard
+                </NavLink>
+              )}
+
+              <NavLink
+                to="/about"
+                className="flex items-center gap-3 px-4 py-3 rounded-2xl hover-theme transition text-theme font-medium"
+              >
+                <Info size={20} />
+                About
+              </NavLink>
+
+              <NavLink
+                to="/contact"
+                className="flex items-center gap-3 px-4 py-3 rounded-2xl hover-theme transition text-theme font-medium"
+              >
+                <Mail size={20} />
+                Contact
+              </NavLink>
+
+              <div className="pt-4 border-t border-theme">
+                {!user ? (
+                  <div className="space-y-3">
+                    <NavLink
+                      to="/login"
+                      className="block w-full text-center px-4 py-3 rounded-2xl border border-theme hover-theme font-medium"
+                    >
+                      Login
+                    </NavLink>
+
+                    <NavLink
+                      to="/register"
+                      className="block w-full text-center btn-primary px-4 py-3 rounded-2xl text-white font-semibold"
+                    >
+                      Get Started
+                    </NavLink>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="px-4 py-3 rounded-2xl surface-secondary">
+                      <p className="font-semibold text-theme">
+                        {userData?.name || "Student"}
+                      </p>
+                      <p className="text-sm text-theme-muted">{user.email}</p>
+                    </div>
+
+                    <button
+                      onClick={() => navigate("/dashboard/profile")}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover-theme transition text-theme font-medium"
+                    >
+                      <Settings size={20} />
+                      Profile & Settings
+                    </button>
+
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-red-500 hover:bg-red-500/10 transition font-medium"
+                    >
+                      <LogOut size={20} />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

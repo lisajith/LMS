@@ -44,12 +44,41 @@ function TestCard({ test, user }) {
 
   const now = new Date();
 
-  const startDate = test.startDate?.toDate();
-  const endDate = test.endDate?.toDate();
+  function parseDate(value) {
+    if (!value) return null;
+
+    // Firestore Timestamp
+    if (typeof value.toDate === "function") {
+      return value.toDate();
+    }
+
+    // Firestore object { seconds, nanoseconds }
+    if (value.seconds) {
+      return new Date(value.seconds * 1000);
+    }
+
+    // Already a Date
+    if (value instanceof Date) {
+      return value;
+    }
+
+    return new Date(value);
+  }
+
+  const startDate = test.startDate?.toDate
+    ? test.startDate.toDate()
+    : new Date(test.startDate);
+
+  const endDate = test.endDate?.toDate
+    ? test.endDate.toDate()
+    : new Date(test.endDate);
 
   let status = "Upcoming";
 
-  if (now >= startDate && now <= endDate) {
+  // Unpublished tests should never be attemptable
+  if (test.isPublished !== true) {
+    status = "Upcoming";
+  } else if (now >= startDate && now <= endDate) {
     status = submission ? "Completed" : "Active";
   } else if (now > endDate) {
     status = submission ? "Completed" : "Ended";
@@ -110,12 +139,12 @@ function TestCard({ test, user }) {
 
           <div className="flex items-center gap-3 text-theme-muted">
             <CalendarDays size={18} />
-            Starts :{startDate?.toLocaleDateString()}
+            Starts: {startDate ? startDate.toLocaleDateString() : "Not set"}
           </div>
 
           <div className="flex items-center gap-3 text-theme-muted">
             <CalendarDays size={18} />
-            Ends :{endDate?.toLocaleDateString()}
+            Ends: {endDate ? endDate.toLocaleDateString() : "Not set"}
           </div>
         </div>
       </div>

@@ -45,13 +45,26 @@ function Tests() {
 
         const testSnap = await getDocs(testQuery);
 
+        // console.log("Enrolled IDs:", enrolledCourseIds);
+
+        const allTests = testSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        // console.log("All Tests:", allTests);
+
         // 5. Keep only tests for enrolled courses
         const filteredTests = testSnap.docs
           .map((doc) => ({
             id: doc.id,
             ...doc.data(),
           }))
-          .filter((test) => enrolledCourseIds.includes(test.courseId));
+          .filter(
+            (test) =>
+              enrolledCourseIds.includes(test.courseId) &&
+              test.isPublished === true
+          );
 
         setTests(filteredTests);
       } catch (err) {
