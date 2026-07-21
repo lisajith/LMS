@@ -5,7 +5,6 @@ import Instructor from "../components/home/Instructor";
 import Journey from "../components/home/Journey";
 
 function Home() {
-  const ref = useReveal();
   return (
     <PageReveal>
       <Hero />
