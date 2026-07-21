@@ -4,35 +4,46 @@
    GLOBAL APP STYLES
 =================================== */
 
-/* Smooth scrolling for anchor links and JS scroll */
 html {
   scroll-behavior: smooth;
 }
 
-/* Prevent horizontal scrollbar */
-body {
-  overflow-x: hidden;
-}
+/* Prevent horizontal scrolling */
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;}
 
 /* ===================================
-   HIDE SCROLLBARS (KEEP SCROLLING)
+   HIDE SCROLLBARS EVERYWHERE
+   (but keep scrolling working)
 =================================== */
 
 /* Chrome, Edge, Safari */
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 0;
   height: 0;
+  display: none;
 }
 
 /* Firefox */
-html,
-body {
+* {
   scrollbar-width: none;
 }
 
 /* IE / old Edge */
-html,
-body {
+* {
   -ms-overflow-style: none;
 }
+
+/* ===================================
+   GLOBAL APP SCALE (95%)
+=================================== */
+/* 
+.app-scale {
+  transform: scale(0.95);
+  transform-origin: top left;
+  width: calc(100% / 0.95);
+  min-height: calc(100vh / 0.95);
+} */

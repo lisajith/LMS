@@ -39,9 +39,7 @@ function StatCards() {
       });
 
       const averageProgress =
-        courses > 0
-          ? Math.round(totalProgress / courses)
-          : 0;
+        courses > 0 ? Math.round(totalProgress / courses) : 0;
 
       setStats({
         courses,
@@ -56,35 +54,33 @@ function StatCards() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-
       <StatCard
-        icon={<BookOpen size={28} />}
+        icon={<BookOpen size={30} className="animate-pulse" />}
         title="Enrolled Courses"
         value={stats.courses}
-        color="bg-blue-100 text-blue-600"
+        color="bg-linear-to-br from-blue-500 to-cyan-500"
       />
 
       <StatCard
-        icon={<CheckCircle2 size={28} />}
+        icon={<CheckCircle2 size={30} className="animate-pulse" />}
         title="Completed Lessons"
         value={stats.completedLessons}
-        color="bg-green-100 text-green-600"
+        color="bg-linear-to-br from-green-500 to-emerald-500"
       />
 
       <StatCard
-        icon={<TrendingUp size={28} />}
+        icon={<TrendingUp size={30} className="animate-pulse" />}
         title="Overall Progress"
         value={`${stats.progress}%`}
-        color="bg-orange-100 text-orange-600"
+        color="bg-linear-to-br from-orange-500 to-amber-500"
       />
 
       <StatCard
-        icon={<Award size={28} />}
+        icon={<Award size={30} className="animate-pulse" />}
         title="Certificates"
         value={stats.certificates}
-        color="bg-purple-100 text-purple-600"
+        color="bg-linear-to-br from-purple-500 to-pink-500"
       />
-
     </div>
   );
 }

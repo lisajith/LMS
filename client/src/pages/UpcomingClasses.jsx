@@ -9,7 +9,7 @@ function UpcomingClasses() {
   const { user } = useAuth();
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     async function fetchClasses() {
@@ -119,24 +119,20 @@ function UpcomingClasses() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      <div className="card-theme rounded-3xl p-8 border border-theme shadow-lg">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl primary-soft flex items-center justify-center">
-            <Calendar className="primary-text" size={24} />
-          </div>
+    <div className="space-y-6">
+      <div className="flex items-center gap-3 mb-8">
+        <Calendar className="primary-text" size={34} />
 
-          <div>
-            <h1 className="text-3xl font-bold">Upcoming Classes</h1>
-            <p className="text-theme-muted">
-              Classes from your enrolled courses
-            </p>
-          </div>
+        <div>
+          <h1 className="text-4xl font-bold">Upcoming Classes</h1>
+          <p className="text-theme-muted mt-1">
+            Classes from your enrolled courses
+          </p>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-3">
-        {["All", "Live", "Upcoming", "Completed"].map((f) => (
+        {["all", "Live", "Upcoming", "Completed"].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
@@ -163,7 +159,7 @@ function UpcomingClasses() {
         <div className="grid md:grid-cols-2 gap-6">
           {classes
             .filter((cls) => {
-              if (filter === "All") return true;
+              if (filter === "all") return true;
               return getStatus(cls) === filter;
             })
             .map((cls) => {

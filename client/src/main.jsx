@@ -20,7 +20,9 @@ createRoot(document.getElementById("root")).render(
     <ThemeProvider>
       <AuthProvider>
         <BrowserRouter>
-          <App />
+          <div className="app-scale">
+            <App />
+          </div>
           <ToastContainer position="top-right" autoClose={2000} theme="colored" />
           <Toaster position="top-center" />
         </BrowserRouter>
