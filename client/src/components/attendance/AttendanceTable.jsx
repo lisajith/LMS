@@ -1,8 +1,4 @@
-import {
-  CalendarDays,
-  CheckCircle2,
-  XCircle,
-} from "lucide-react";
+import { CalendarDays, CheckCircle2, XCircle } from "lucide-react";
 
 const attendance = [
   {
@@ -38,21 +34,12 @@ const attendance = [
 ];
 
 function AttendanceTable() {
-
   return (
-
     <div className="card-theme rounded-2xl shadow p-6">
-
-      <h2 className="text-2xl font-bold mb-6">
-
-        Attendance History
-
-      </h2>
+      <h2 className="text-2xl font-bold mb-6">Attendance History</h2>
 
       <div className="space-y-4">
-
         {attendance.map((item) => (
-
           <div
             key={item.id}
             className="
@@ -67,27 +54,17 @@ function AttendanceTable() {
               transition
             "
           >
-
             <div>
-
-              <h3 className="font-semibold text-lg">
-
-                {item.course}
-
-              </h3>
+              <h3 className="font-semibold text-lg">{item.course}</h3>
 
               <div className="flex items-center gap-2 mt-1 text-theme-muted">
-
                 <CalendarDays size={16} />
 
                 {item.date}
-
               </div>
-
             </div>
 
             {item.status === "Present" ? (
-
               <div
                 className="
                   flex
@@ -102,15 +79,10 @@ function AttendanceTable() {
                   dark:text-green-400
                 "
               >
-
                 <CheckCircle2 size={18} />
-
                 Present
-
               </div>
-
             ) : (
-
               <div
                 className="
                   flex
@@ -125,25 +97,15 @@ function AttendanceTable() {
                   dark:text-red-400
                 "
               >
-
                 <XCircle size={18} />
-
                 Absent
-
               </div>
-
             )}
-
           </div>
-
         ))}
-
       </div>
-
     </div>
-
   );
-
 }
 
 export default AttendanceTable;

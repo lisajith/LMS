@@ -46,6 +46,13 @@ import AdminTests from '../pages/admin/AdminTests';
 import CreateTest from '../pages/admin/CreateTest';
 import EditTest from '../pages/admin/EditTest';
 import TestSubmissions from '../pages/admin/TestSubmissions';
+import AdminClasses from "../pages/admin/AdminClasses";
+import CreateClass from "../pages/admin/CreateClass";
+import EditClass from "../pages/admin/EditClass";
+import AdminAttendance from "../pages/admin/AdminAttendance";
+import AdminStudents from "../pages/admin/AdminStudents";
+import StudentProfile from "../pages/admin/StudentProfile";
+import AdminAnnouncements from "../pages/admin/AdminAnnouncements";
 
 function AppRoutes() {
   return (
@@ -126,6 +133,13 @@ function AppRoutes() {
           <Route path="tests/create" element={<CreateTest />} />
           <Route path="tests/edit/:id" element={<EditTest />} />
           <Route path="tests/submissions/:id" element={<TestSubmissions />} />
+          <Route path="classes" element={<AdminClasses />} />
+          <Route path="classes/create" element={<CreateClass />} />
+          <Route path="classes/edit/:id" element={<EditClass />} />
+          <Route path="attendance" element={<AdminAttendance />} />
+          <Route path="students" element={<AdminStudents />} />
+          <Route path="students/:id" element={<StudentProfile />} />
+          <Route path="announcements" element={<AdminAnnouncements />} />
         </Route>
     </Routes>
   );

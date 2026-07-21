@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+/* ===================================
+   GLOBAL APP STYLES
+=================================== */
+
+/* Smooth scrolling for anchor links and JS scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent horizontal scrollbar */
+body {
+  overflow-x: hidden;
+}
+
+/* ===================================
+   HIDE SCROLLBARS (KEEP SCROLLING)
+=================================== */
+
+/* Chrome, Edge, Safari */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* Firefox */
+html,
+body {
+  scrollbar-width: none;
+}
+
+/* IE / old Edge */
+html,
+body {
+  -ms-overflow-style: none;
+}

@@ -1,5 +1,5 @@
 const instructor = {
-  name: "Sreevani Patnam",
+  name: "NA",
   role: "Software Developer",
   tagline:
     "Helping students become industry-ready developers through practical learning.",

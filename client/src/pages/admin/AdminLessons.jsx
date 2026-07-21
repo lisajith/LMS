@@ -366,7 +366,7 @@ Create and organize course lessons </p> </div>
                 setFormData({ ...formData, title: e.target.value })
               }
               className="w-full px-4 py-3 rounded-2xl border border-theme bg-theme outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Introduction to Python"
+              placeholder="Ex: Introduction to Python"
             />
           </div>
 
@@ -392,7 +392,7 @@ Create and organize course lessons </p> </div>
                 setFormData({ ...formData, notesUrl: e.target.value })
               }
               className="w-full px-4 py-3 rounded-2xl border border-theme bg-theme outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://drive.google.com/..."
+              placeholder="https://res.cloudinary.com/..."
             />
           </div>
 

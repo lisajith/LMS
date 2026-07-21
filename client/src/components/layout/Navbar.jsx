@@ -82,6 +82,7 @@ function Navbar() {
     async function fetchAnnouncements() {
       const announcementQuery = query(
         collection(db, "announcements"),
+        where("active", "==", true),
         orderBy("createdAt", "desc"),
         limit(5)
       );

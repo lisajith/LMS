@@ -10,7 +10,17 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
-import { Plus, Edit, Trash2, Search, BookOpen, Save, X } from "lucide-react";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Search,
+  BookOpen,
+  Save,
+  X,
+  Link,
+} from "lucide-react";
+import AdminPageHeader from "../../components/admin/AdminPageHeader";
 
 function AdminCourses() {
   const [courses, setCourses] = useState([]);
@@ -145,24 +155,22 @@ function AdminCourses() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}{" "}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        {" "}
-        <div>
-          {" "}
-          <h1 className="text-4xl font-bold">Course Management</h1>{" "}
-          <p className="text-theme-muted mt-2">
-            Create, edit and manage all courses{" "}
-          </p>{" "}
-        </div>
-        <button
-          onClick={openCreateModal}
-          className="btn-primary px-5 py-3 rounded-2xl flex items-center gap-2"
-        >
-          <Plus size={20} />
-          Create Course
-        </button>
-      </div>
+      
+      {/* Header */}
+      <AdminPageHeader
+        icon={<BookOpen size={30} />}
+        title="Course Management"
+        description="Create, update, and organize all learning courses, instructors, and curriculum content from one place."
+        action={
+          <button
+            onClick={openCreateModal}
+            className="bg-white text-blue-700 px-5 py-3 rounded-2xl font-semibold hover:bg-blue-50 transition shadow-lg flex items-center gap-2"
+          >
+            <Plus size={20} />
+            Create Course
+          </button>
+        }
+      />
       {/* Search */}
       <div className="card-theme rounded-3xl p-5 border border-theme shadow-lg">
         <div className="relative">
@@ -297,7 +305,7 @@ function AdminCourses() {
                       setFormData({ ...formData, title: e.target.value })
                     }
                     className="w-full px-4 py-3 rounded-2xl border border-theme bg-theme outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Python Programming"
+                    placeholder="Ex: Java"
                   />
                 </div>
 
@@ -311,7 +319,7 @@ function AdminCourses() {
                       setFormData({ ...formData, instructor: e.target.value })
                     }
                     className="w-full px-4 py-3 rounded-2xl border border-theme bg-theme outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Ajith Kumar"
+                    placeholder="Enter Name"
                   />
                 </div>
 
@@ -325,7 +333,7 @@ function AdminCourses() {
                       setFormData({ ...formData, duration: e.target.value })
                     }
                     className="w-full px-4 py-3 rounded-2xl border border-theme bg-theme outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="8 Weeks"
+                    placeholder="Weeks"
                   />
                 </div>
 
@@ -354,7 +362,7 @@ function AdminCourses() {
                     setFormData({ ...formData, thumbnail: e.target.value })
                   }
                   className="w-full px-4 py-3 rounded-2xl border border-theme bg-theme outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="https://images.unsplash.com/..."
+                  placeholder="https://res.cloudinary.com/..."
                 />
               </div>
 

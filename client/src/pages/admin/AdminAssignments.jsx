@@ -4,6 +4,7 @@ import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
 import { Plus, Edit, Trash2, Calendar, BookOpen, FileText } from "lucide-react";
+import AdminPageHeader from "../../components/admin/AdminPageHeader";
 
 function AdminAssignments() {
   const [assignments, setAssignments] = useState([]);
@@ -51,23 +52,20 @@ function AdminAssignments() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Assignments</h1>
-
-          <p className="text-theme-muted">
-            Create and manage course assignments
-          </p>
-        </div>
-
-        <Link
-          to="/admin/assignments/create"
-          className="btn-primary px-5 py-3 rounded-xl flex items-center gap-2"
-        >
-          <Plus size={18} />
-          Create Assignment
-        </Link>
-      </div>
+      <AdminPageHeader
+        icon={<FileText size={30} />}
+        title="Assignment Center"
+        description="Create assignments, manage deadlines, review submissions, and monitor student completion."
+        action={
+          <Link
+            to="/admin/assignments/create"
+            className="bg-white text-blue-700 px-5 py-3 rounded-2xl font-semibold hover:bg-blue-50 transition shadow-lg flex items-center gap-2"
+          >
+            <Plus size={18} />
+            Create Assignment
+          </Link>
+        }
+      />
 
       {assignments.length === 0 ? (
         <div className="card-theme rounded-2xl p-12 text-center border border-theme">

@@ -11,7 +11,9 @@ import {
   Clock,
   BookOpen,
   Users,
+  ShieldCheck,
 } from "lucide-react";
+import AdminPageHeader from "../../components/admin/AdminPageHeader";
 
 function AdminTests() {
   const [tests, setTests] = useState([]);
@@ -59,21 +61,20 @@ function AdminTests() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Tests</h1>
-
-          <p className="text-theme-muted">Create and manage course tests</p>
-        </div>
-
-        <Link
-          to="/admin/tests/create"
-          className="btn-primary px-5 py-3 rounded-xl flex items-center gap-2"
-        >
-          <Plus size={18} />
-          Create Test
-        </Link>
-      </div>
+      <AdminPageHeader
+        icon={<ShieldCheck size={30} />}
+        title="Test & Assessment Hub"
+        description="Build quizzes and exams, manage questions, review submissions, and analyze student performance."
+        action={
+          <Link
+            to="/admin/tests/create"
+            className="bg-white text-blue-700 px-5 py-3 rounded-2xl font-semibold hover:bg-blue-50 transition shadow-lg flex items-center gap-2"
+          >
+            <Plus size={18} />
+            Create Test
+          </Link>
+        }
+      />
 
       {tests.length === 0 ? (
         <div className="card-theme rounded-2xl p-12 text-center border border-theme">

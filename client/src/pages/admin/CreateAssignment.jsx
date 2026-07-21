@@ -125,7 +125,7 @@ function CreateAssignment() {
             value={form.title}
             onChange={handleChange}
             className="w-full rounded-xl border border-theme bg-theme p-4"
-            placeholder="Variables Practice"
+            placeholder="Title"
             required
           />
         </div>
@@ -183,7 +183,7 @@ function CreateAssignment() {
             value={form.attachmentUrl}
             onChange={handleChange}
             className="w-full rounded-xl border border-theme bg-theme p-4"
-            placeholder="https://drive.google.com/..."
+            placeholder="https://res.cloudinary.com/..."
           />
         </div>
 
