@@ -16,6 +16,7 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 
 import { useAuth } from "../context/AuthContext";
+import PageReveal from "../components/common/PageReveal";
 
 function Contact() {
   const { user, userData } = useAuth();
@@ -97,6 +98,7 @@ function Contact() {
   }
 
   return (
+    <PageReveal>
     <div className="bg-theme min-h-screen py-16">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
@@ -372,6 +374,7 @@ function Contact() {
         </div>
       </div>
     </div>
+    </PageReveal>
   );
 }
 

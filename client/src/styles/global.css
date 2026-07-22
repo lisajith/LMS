@@ -6,18 +6,30 @@
 
 html {
   scroll-behavior: smooth;
+
+  /* Better text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Smoother momentum scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Prevent horizontal scrolling */
+body {
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+/* App sizing */
 html,
 body,
 #root {
   width: 100%;
-  height: 100%;}
+  height: 100%;
+}
 
 /* ===================================
-   HIDE SCROLLBARS EVERYWHERE
-   (but keep scrolling working)
+   HIDE SCROLLBARS (KEEP SCROLLING)
 =================================== */
 
 /* Chrome, Edge, Safari */
@@ -37,13 +49,12 @@ body,
   -ms-overflow-style: none;
 }
 
-/* ===================================
-   GLOBAL APP SCALE (95%)
-=================================== */
-/* 
-.app-scale {
-  transform: scale(0.95);
-  transform-origin: top left;
-  width: calc(100% / 0.95);
-  min-height: calc(100vh / 0.95);
-} */
+/* Better mobile tap feel */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth drawer animation */
+* {
+  backface-visibility: hidden;
+}

@@ -85,13 +85,13 @@ function PersonalInfo() {
             Phone Number
           </label>
 
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
 
             <select
               name="countryCode"
               value={form.countryCode}
               onChange={handleChange}
-              className="card-theme rounded-xl px-3"
+              className="w-full sm:w-auto card-theme rounded-xl px-3 py-3"
             >
               <option value="+91">🇮🇳 +91</option>
               <option value="+1">🇺🇸 +1</option>
@@ -191,7 +191,7 @@ function PersonalInfo() {
 
       <button
         onClick={handleSave}
-        className="btn-primary mt-8 px-6 py-3 rounded-xl flex items-center gap-2 hover:scale-105 transition"
+        className="btn-primary mt-8 w-full sm:w-auto px-6 py-3 rounded-xl flex items-center justify-center gap-2 hover:scale-105 transition"
       >
         <Save size={18} />
         Save Changes

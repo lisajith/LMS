@@ -1,8 +1,10 @@
 import { FolderOpen } from "lucide-react";
 import AllCourses from "../components/dashboard/AllCourses";
+import PageReveal from "../components/common/PageReveal";
 
 function Courses() {
   return (
+    <PageReveal>
     <section className="max-w-7xl mx-auto px-6 py-16 bg-theme min-h-screen">
 
       <div className="flex items-center gap-3 mb-10">
@@ -21,6 +23,7 @@ function Courses() {
       <AllCourses />
 
     </section>
+    </PageReveal>
   );
 }
 

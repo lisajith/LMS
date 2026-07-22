@@ -81,7 +81,7 @@ function ProfileCard() {
 
         <div className="relative group">
 
-          <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-blue-500 shadow-xl">
+          <div className="w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden border-4 border-blue-500 shadow-xl">
 
             {userData?.photoURL ? (
 
@@ -157,7 +157,7 @@ function ProfileCard() {
 
         {/* Name */}
 
-        <h2 className="mt-6 text-2xl font-bold text-theme">
+        <h2 className="mt-5 text-xl sm:text-2xl font-bold text-theme text-center">
 
           {userData?.name}
 
@@ -165,7 +165,7 @@ function ProfileCard() {
 
         {/* Email */}
 
-        <p className="mt-2 text-theme-muted">
+        <p className="mt-2 text-theme-muted text-center break-all">
 
           {userData?.email}
 

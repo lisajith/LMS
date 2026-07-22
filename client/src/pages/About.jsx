@@ -6,9 +6,11 @@ import {
   FileText,
   ShieldCheck,
 } from "lucide-react";
+import PageReveal from "../components/common/PageReveal";
 
 function About() {
   return (
+    <PageReveal>
     <section className="bg-theme py-24">
 
       <div className="max-w-7xl mx-auto px-6">
@@ -220,6 +222,7 @@ function About() {
       </div>
 
     </section>
+    </PageReveal>
   );
 }
 

@@ -14,7 +14,7 @@ function Profile() {
   return (
     <section className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-theme">Profile</h1>
           <p className="text-theme-muted mt-1">
@@ -27,7 +27,7 @@ function Profile() {
         {userData?.role === "admin" && (
           <button
             onClick={() => navigate("/admin")}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition shadow-lg"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition shadow-lg"
           >
             <ShieldCheck size={18} />
             Back to Admin Panel
