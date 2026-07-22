@@ -164,7 +164,7 @@ Back to Students </Link>
       <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-blue-500 shadow-xl">
         {student.photoURL ? (
           <img
-            src={student.photoURL}
+            src={student.photoURL?.replace("http://", "https://")}
             alt={student.name}
             className="w-full h-full object-cover"
           />

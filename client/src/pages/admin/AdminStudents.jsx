@@ -363,7 +363,7 @@ function AdminStudents() {
                         <div className="w-12 h-12 rounded-2xl bg-indigo-100 flex items-center justify-center overflow-hidden">
                           {student.photoURL ? (
                             <img
-                              src={student.photoURL}
+                              src={student.photoURL?.replace("http://", "https://")}
                               alt={student.name}
                               className="w-full h-full object-cover"
                             />

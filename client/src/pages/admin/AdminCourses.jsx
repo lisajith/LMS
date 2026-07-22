@@ -224,7 +224,7 @@ function AdminCourses() {
                       <div className="flex items-center gap-4">
                         <img
                           src={
-                            course.thumbnail ||
+                            course.thumbnail?.replace("http://", "https://") ||
                             "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=200&q=80"
                           }
                           alt={course.title}

@@ -142,7 +142,7 @@ function AdminLayout() {
               <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-500 bg-white flex items-center justify-center">
                 {userData?.photoURL ? (
                   <img
-                    src={userData.photoURL}
+                    src={userData.photoURL?.replace("http://", "https://")}
                     alt={userData.name}
                     className="w-full h-full object-cover"
                   />

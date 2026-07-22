@@ -303,7 +303,7 @@ function Navbar() {
                   <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-blue-500">
                     {userData?.photoURL ? (
                       <img
-                        src={userData.photoURL}
+                        src={userData.photoURL?.replace("http://", "https://")}
                         alt={userData.name}
                         className="w-full h-full object-cover"
                       />

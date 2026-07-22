@@ -75,7 +75,7 @@ function CourseCard({
       <div className="relative h-56 overflow-hidden bg-transparent dark:bg-linear-to-br dark:from-slate-800 dark:to-slate-900">
         {thumbnail ? (
           <img
-            src={thumbnail}
+            src={thumbnail?.replace("http://", "https://")}
             alt={title}
             className="w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-110"
           />
