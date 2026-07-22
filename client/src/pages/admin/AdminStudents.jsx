@@ -30,15 +30,14 @@ function AdminStudents() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState(null);
-
+  const [saving, setSaving] = useState(false);
+  const [studentEnrollments, setStudentEnrollments] = useState([]);
   const [editForm, setEditForm] = useState({
     name: "",
     email: "",
     phone: "",
     role: "student",
   });
-
-  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -116,7 +115,7 @@ function AdminStudents() {
     }
   }
 
-  function openEdit(student) {
+  async function openEdit(student) {
     setSelectedStudent(student);
 
     setEditForm({
@@ -125,6 +124,34 @@ function AdminStudents() {
       phone: student.phone || "",
       role: student.role || "student",
     });
+
+    // Load enrollments
+    const enrollQuery = query(
+      collection(db, "enrollments"),
+      where("userId", "==", student.id)
+    );
+
+    const enrollSnap = await getDocs(enrollQuery);
+
+    setStudentEnrollments(
+      enrollSnap.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }))
+    );
+  }
+
+  async function removeEnrollment(enrollmentId) {
+    try {
+      await deleteDoc(doc(db, "enrollments", enrollmentId));
+
+      setStudentEnrollments((prev) =>
+        prev.filter((e) => e.id !== enrollmentId)
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Failed to remove enrollment");
+    }
   }
 
   async function saveStudent() {
@@ -544,6 +571,54 @@ function AdminStudents() {
                     <option value="student">Student</option>
                     <option value="admin">Admin</option>
                   </select>
+                </div>
+              </div>
+
+              {/* Enrollments */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-semibold mb-3">
+                  Enrolled Courses
+                </label>
+
+                <div
+                  className="space-y-3 h-48 overflow-y-scroll rounded-2xl border border-theme p-3 overscroll-contain"
+                  onWheel={(e) => e.stopPropagation()}
+                >
+                  {studentEnrollments.length === 0 ? (
+                    <p className="text-theme-muted text-sm">
+                      No enrollments found
+                    </p>
+                  ) : (
+                    studentEnrollments.map((enrollment) => {
+                      const course = courses.find(
+                        (c) => c.id === enrollment.courseId
+                      );
+
+                      return (
+                        <div
+                          key={enrollment.id}
+                          className="flex items-center justify-between rounded-xl bg-theme-secondary p-3 border border-theme"
+                        >
+                          <div>
+                            <p className="font-semibold">
+                              {course?.title || enrollment.courseId}
+                            </p>
+                            <p className="text-xs text-theme-muted">
+                              Progress: {enrollment.progress || 0}%
+                            </p>
+                          </div>
+
+                          <button
+                            onClick={() => removeEnrollment(enrollment.id)}
+                            className="p-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition"
+                            title="Remove enrollment"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      );
+                    })
+                  )}
                 </div>
               </div>
             </div>

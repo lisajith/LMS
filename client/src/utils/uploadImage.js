@@ -14,5 +14,5 @@ export async function uploadImage(file) {
 
   const data = await response.json();
 
-  return data.url;
+  return data.secure_url;;
 }

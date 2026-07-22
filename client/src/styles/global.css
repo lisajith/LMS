@@ -58,3 +58,17 @@ button, a {
 * {
   backface-visibility: hidden;
 }
+
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+  display: block;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #64748b;
+  border-radius: 9999px;
+}
+
+.custom-scroll {
+  scrollbar-width: thin;
+}

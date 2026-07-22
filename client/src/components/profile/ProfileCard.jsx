@@ -88,6 +88,7 @@ function ProfileCard() {
               <img
                 src={userData.photoURL}
                 alt={userData.name}
+                crossOrigin="anonymous"
                 className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
               />
 
