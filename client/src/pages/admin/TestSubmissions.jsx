@@ -80,7 +80,10 @@ function TestSubmissions() {
             const obtainedMarks = Number(submission.obtainedMarks ?? 0);
             const totalMarks = Number(submission.totalMarks ?? 1);
 
-            const percentage = Math.round((obtainedMarks / totalMarks) * 100);
+            const percentage =
+              totalMarks > 0
+                ? Math.round((obtainedMarks / totalMarks) * 100)
+                : 0;
 
             const attempted = Object.keys(submission.answers || {}).length;
 

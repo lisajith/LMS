@@ -136,10 +136,41 @@ function AdminLayout() {
             })}
           </nav>
 
-          {/* Bottom section */}
+          {/* ================= BOTTOM SECTION ================= */}
           <div className="pt-4 border-t border-theme space-y-3 mt-4">
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-theme-secondary border border-theme">
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-500 bg-white flex items-center justify-center">
+            {/* Clickable Profile Card */}
+            <button
+              onClick={() => {
+                navigate("/dashboard/profile");
+                closeSidebar();
+              }}
+              className="
+      w-full
+      flex
+      items-center
+      gap-3
+      p-3
+      rounded-2xl
+      bg-theme-secondary
+      border
+      border-theme
+      hover:bg-theme-hover
+      transition-all
+      duration-300
+      cursor-pointer
+      text-left
+      group
+    "
+            >
+              {/* Profile Image */}
+              <div
+                className="
+      w-12 h-12 rounded-full overflow-hidden
+      border-2 border-blue-500 bg-white
+      flex items-center justify-center
+      shrink-0
+    "
+              >
                 {userData?.photoURL ? (
                   <img
                     src={userData.photoURL?.replace("http://", "https://")}
@@ -151,30 +182,49 @@ function AdminLayout() {
                 )}
               </div>
 
-              <div className="min-w-0">
-                <p className="font-semibold text-theme truncate">
+              {/* User Info */}
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-theme truncate group-hover:text-blue-600 transition-colors">
                   {userData?.name || "Admin User"}
                 </p>
-                <p className="text-sm text-theme-muted capitalize">
-                  {userData?.role || "Administrator"}
-                </p>
-              </div>
-            </div>
 
-            <button
-              onClick={() => {
-                navigate("/dashboard/profile");
-                closeSidebar();
-              }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-theme hover:bg-theme-hover transition-all duration-300 font-medium text-theme"
-            >
-              <Settings size={18} />
-              Profile & Settings
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span
+                    className="
+          inline-flex items-center gap-1
+          px-2 py-0.5 rounded-full
+          text-xs font-medium
+          bg-blue-100 text-blue-700
+          dark:bg-blue-500/20 dark:text-blue-300
+          capitalize
+        "
+                  >
+                    <ShieldCheck size={12} />
+                    {userData?.role || "Administrator"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Arrow */}
+              <div className="text-theme-muted group-hover:translate-x-0.5 transition-transform">
+                <Settings size={18} />
+              </div>
             </button>
 
+            {/* Logout Button */}
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-red-500 text-white hover:bg-red-600 transition-all duration-300 shadow-lg font-medium"
+              className="
+      w-full
+      flex items-center justify-center gap-2
+      px-4 py-3 rounded-2xl
+      bg-red-500 text-white
+      hover:bg-red-600
+      transition-all duration-300
+      shadow-lg font-medium
+      hover:scale-[1.02]
+      active:scale-[0.98]
+    "
             >
               <LogOut size={18} />
               Logout

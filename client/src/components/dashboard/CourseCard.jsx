@@ -72,16 +72,21 @@ function CourseCard({
   return (
     <div className="group relative overflow-hidden rounded-3xl border border-theme bg-theme shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
       {/* Image Section */}
-      <div className="relative h-56 overflow-hidden bg-transparent dark:bg-linear-to-br dark:from-slate-800 dark:to-slate-900">
+      <div className="relative h-56 overflow-hidden thumbnail-bg">
         {thumbnail ? (
           <img
             src={thumbnail?.replace("http://", "https://")}
             alt={title}
-            className="w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-110"
+            className="
+              relative z-10
+              w-full h-full object-contain p-1.5
+              transition-transform duration-700
+              group-hover:scale-110
+            "
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <div className="text-center text-slate-500">
+            <div className="text-center text-slate-500 dark:text-slate-400">
               <Book size={48} className="mx-auto mb-3 opacity-60" />
               <p className="text-sm font-medium">No Thumbnail</p>
             </div>
@@ -89,10 +94,28 @@ function CourseCard({
         )}
 
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div
+          className="
+    absolute inset-0
+    bg-linear-to-t from-black/20 via-transparent to-transparent
+    opacity-0 group-hover:opacity-100
+    transition-opacity duration-500
+  "
+        ></div>
 
         {/* Rating Badge */}
-        <div className="absolute top-4 right-4 flex items-center gap-1 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur px-3 py-1.5 shadow-lg border border-white/20">
+        <div
+          className="
+    absolute top-4 right-4
+    flex items-center gap-1
+    rounded-full
+    bg-white/90 dark:bg-slate-800/90
+    backdrop-blur
+    px-3 py-1.5
+    shadow-lg
+    border border-white/20
+  "
+        >
           <Star size={16} className="text-yellow-500 fill-yellow-500" />
           <span className="text-sm font-bold text-slate-800 dark:text-slate-100">
             {rating}
@@ -101,7 +124,14 @@ function CourseCard({
 
         {/* Status Badge */}
         {myCourse && (
-          <div className="absolute top-4 left-4 rounded-full bg-blue-600 text-white px-3 py-1 text-xs font-semibold shadow-lg">
+          <div
+            className="
+      absolute top-4 left-4
+      rounded-full
+      bg-blue-600 text-white
+      px-3 py-1 text-xs font-semibold shadow-lg
+    "
+          >
             My Course
           </div>
         )}

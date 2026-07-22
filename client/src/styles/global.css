@@ -11,13 +11,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Smoother momentum scrolling on mobile */
+  /* Smooth momentum scrolling on mobile */
   -webkit-overflow-scrolling: touch;
-}
-
-body {
-  overflow-x: hidden;
-  text-rendering: optimizeLegibility;
 }
 
 /* App sizing */
@@ -25,14 +20,22 @@ html,
 body,
 #root {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+}
+
+/* Let browser handle scrolling naturally */
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-rendering: optimizeLegibility;
 }
 
 /* ===================================
-   HIDE SCROLLBARS (KEEP SCROLLING)
+   HIDE SCROLLBARS GLOBALLY
+   (scroll still works)
 =================================== */
 
-/* Chrome, Edge, Safari */
+/* Chrome / Edge / Safari */
 *::-webkit-scrollbar {
   width: 0;
   height: 0;
@@ -49,14 +52,14 @@ body,
   -ms-overflow-style: none;
 }
 
-/* Better mobile tap feel */
-button, a {
-  -webkit-tap-highlight-color: transparent;
-}
+/* ===================================
+   CUSTOM SCROLL AREAS
+   Use className="custom-scroll"
+=================================== */
 
-/* Smooth drawer animation */
-* {
-  backface-visibility: hidden;
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #64748b transparent;
 }
 
 .custom-scroll::-webkit-scrollbar {
@@ -64,11 +67,63 @@ button, a {
   display: block;
 }
 
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .custom-scroll::-webkit-scrollbar-thumb {
   background: #64748b;
   border-radius: 9999px;
 }
 
-.custom-scroll {
-  scrollbar-width: thin;
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ===================================
+   MOBILE IMPROVEMENTS
+=================================== */
+
+/* Remove blue tap highlight */
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Better touch response */
+button {
+  touch-action: manipulation;
+}
+
+/* Prevent text selection on icon buttons */
+.icon-button {
+  user-select: none;
+}
+
+/* ===================================
+   PERFORMANCE
+=================================== */
+
+/* Prevent flicker during transforms */
+.transform-smooth {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* Light mode */
+.thumbnail-bg {
+  background: transparent;
+}
+
+/* Dark mode */
+.dark .thumbnail-bg {
+  background: linear-gradient(
+    135deg,
+    #1e293b 0%,
+    #0f172a 100%
+  );
 }
