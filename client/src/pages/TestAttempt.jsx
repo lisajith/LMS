@@ -251,7 +251,7 @@ function TestAttempt() {
       );
     } else {
       toast.error(
-        "Exam ended due to repeated navigation violations. Your current answers are being submitted automatically.",
+        "Exam terminated due to repeated security violations. Your answers have been submitted automatically.",
         { duration: 5000 }
       );
 
@@ -309,6 +309,23 @@ function TestAttempt() {
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [test]);
+
+  // FULLSCREEN EXIT DETECTION
+  useEffect(() => {
+    if (!test) return;
+
+    function handleFullscreenExit() {
+      if (!document.fullscreenElement) {
+        handleViolation("Exited fullscreen mode");
+      }
+    }
+
+    document.addEventListener("fullscreenchange", handleFullscreenExit);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenExit);
     };
   }, [test]);
 

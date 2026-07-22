@@ -26,6 +26,7 @@ function EditTest() {
     totalMarks: 0,
     startDate: "",
     endDate: "",
+    isPublished: false,
     questions: [],
   });
   const [courses, setCourses] = useState([]);
@@ -62,6 +63,7 @@ function EditTest() {
             totalMarks: data.totalMarks || 0,
             startDate: formatForDateTimeLocal(data.startDate),
             endDate: formatForDateTimeLocal(data.endDate),
+            isPublished: data.isPublished || false,
             questions: data.questions || [],
           });
         }
@@ -272,6 +274,62 @@ function EditTest() {
           </div>
         </div>
 
+        {/* Publish Status */}
+        <div className="card-theme rounded-2xl border border-theme p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold text-theme">Test Status</h3>
+              <p className="text-sm text-theme-muted mt-1">
+                Publish this test to make it visible and accessible to students.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                setForm((prev) => ({
+                  ...prev,
+                  isPublished: !prev.isPublished,
+                }))
+              }
+              className={`relative inline-flex h-7 w-14 items-center rounded-full transition-all duration-300 ${
+                form.isPublished
+                  ? "bg-green-500"
+                  : "bg-gray-300 dark:bg-gray-600"
+              }`}
+            >
+              <span
+                className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-all duration-300 ${
+                  form.isPublished ? "translate-x-8" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
+
+          <div className="mt-4 flex items-center gap-3">
+            <span
+              className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold ${
+                form.isPublished
+                  ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                  : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+              }`}
+            >
+              <span
+                className={`h-2 w-2 rounded-full ${
+                  form.isPublished ? "bg-green-500" : "bg-yellow-500"
+                }`}
+              />
+              {form.isPublished ? "Published" : "Draft"}
+            </span>
+
+            <span className="text-sm text-theme-muted">
+              {form.isPublished
+                ? "Students can see and attempt this test."
+                : "This test is saved as a draft and hidden from students."}
+            </span>
+          </div>
+        </div>
+
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">Questions</h2>
@@ -400,8 +458,15 @@ function EditTest() {
           ))}
         </div>
 
-        <button type="submit" className="btn-primary px-6 py-3 rounded-xl">
-          Update Test
+        <button
+          type="submit"
+          className={`px-6 py-3 rounded-xl font-semibold text-white transition ${
+            form.isPublished
+              ? "bg-green-600 hover:bg-green-700"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
+        >
+          {form.isPublished ? "Save & Publish Test" : "Save as Draft"}
         </button>
       </form>
     </div>
