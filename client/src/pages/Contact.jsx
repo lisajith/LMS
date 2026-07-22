@@ -133,7 +133,7 @@ function Contact() {
                 <h2 className="font-bold text-xl">Email</h2>
               </div>
 
-              <p className="text-theme-muted">srivani@😏😏😏.com</p>
+              <p className="text-theme-muted">thikka@😏😏😏.com</p>
             </div>
 
             <div>
