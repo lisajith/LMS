@@ -34,8 +34,8 @@ function NotFound() {
           </h2>
 
           <p className="text-theme-muted text-lg leading-relaxed max-w-2xl mx-auto mb-8">
-            The page you’re looking for may have been moved, deleted, or the
-            URL might be incorrect. Don’t worry — let’s get you back to SyVa.
+            The page you’re looking for may have been moved, deleted, or the URL
+            might be incorrect. Don’t worry — let’s get you back to SyVA.
           </p>
 
           {/* Quick actions */}
@@ -90,7 +90,7 @@ function NotFound() {
 
         {/* Footer */}
         <p className="mt-6 text-sm text-theme-muted">
-          Error 404 • SyVa Learning Management System
+          Error 404 • SyVA Learning Management System
         </p>
       </div>
     </div>

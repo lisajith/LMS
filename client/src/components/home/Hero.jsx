@@ -40,7 +40,7 @@ function Hero() {
             </h1>
 
             <p className="mt-8 text-lg leading-8 text-theme-muted max-w-xl">
-              SyVa brings courses, assignments, online examinations,
+              SyVA brings courses, assignments, online examinations,
               announcements, attendance, certificates, and progress tracking
               together in one intelligent virtual learning ecosystem designed
               for students and educators.
@@ -48,14 +48,16 @@ function Hero() {
 
             <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
               <div className="flex items-center gap-2 rounded-full border border-theme px-4 py-2 bg-theme-secondary">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" ></div>
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                 <span className="text-theme-muted font-medium">
                   Live Learning Platform
                 </span>
               </div>
 
               <div className="flex items-center gap-2 rounded-full border border-theme px-4 py-2 bg-theme-secondary">
-                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"> </div>
+                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse">
+                  {" "}
+                </div>
                 <span className="text-theme-muted font-medium">
                   Secure Online Exams
                 </span>
@@ -92,7 +94,7 @@ function Hero() {
 
           <div>
             <div className="card-theme rounded-4xl p-10 shadow-2xl border border-theme">
-              <h3 className="text-2xl font-bold">Why Students Choose SyVa</h3>
+              <h3 className="text-2xl font-bold">Why Students Choose SyVA</h3>
 
               <p className="mt-2 text-theme-muted">
                 A complete virtual academy built around collaboration,

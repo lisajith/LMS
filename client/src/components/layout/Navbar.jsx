@@ -139,7 +139,7 @@ function Navbar() {
           {/* Brand Text */}
           <div className="leading-tight">
             <h1 className="text-2xl font-extrabold tracking-tight text-theme">
-              SyVa
+              SyVA
             </h1>
 
             <p className="text-[11px] font-medium text-theme-muted uppercase tracking-[0.18em]">

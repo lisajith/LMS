@@ -61,7 +61,7 @@ function AdminLayout() {
             <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white shadow-lg">
               <ShieldCheck size={20} />
             </div>
-            <h1 className="text-2xl font-bold primary-text">SyVa</h1>
+            <h1 className="text-2xl font-bold primary-text">SyVA</h1>
           </div>
 
           {/* Floating menu button */}
@@ -98,7 +98,7 @@ function AdminLayout() {
               <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white shadow-lg">
                 <ShieldCheck size={24} />
               </div>
-              <h1 className="text-3xl font-bold primary-text">SyVa</h1>
+              <h1 className="text-3xl font-bold primary-text">SyVA</h1>
             </div>
 
             {/* Close button - mobile only */}

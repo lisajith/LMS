@@ -16,7 +16,7 @@ function Header() {
       {/* Left Area */}
       <Link to="/" className="flex items-center gap-3">
         <GraduationCap className="text-blue-600" size={34} />
-        <h1 className="text-2xl font-bold text-theme">SyVa</h1>
+        <h1 className="text-2xl font-bold text-theme">SyVA</h1>
       </Link>
 
       {/* Right Area */}

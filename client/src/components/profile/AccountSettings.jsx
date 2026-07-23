@@ -42,7 +42,7 @@ function AccountSettings() {
               <h3 className="font-semibold text-theme">Appearance</h3>
 
               <p className="text-sm text-theme-muted">
-                Customize your SyVa experience
+                Customize your SyVA experience
               </p>
             </div>
           </div>
