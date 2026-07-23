@@ -129,10 +129,23 @@ function Navbar() {
         {/* Logo */}
         <Link
           to={user ? "/dashboard" : "/"}
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 group"
         >
-          <GraduationCap size={34} style={{ color: "var(--primary)" }} />
-          <span className="text-2xl font-bold text-theme">SyVa</span>
+          {/* Logo Icon */}
+          <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
+            <GraduationCap size={26} />
+          </div>
+
+          {/* Brand Text */}
+          <div className="leading-tight">
+            <h1 className="text-2xl font-extrabold tracking-tight text-theme">
+              SyVa
+            </h1>
+
+            <p className="text-[11px] font-medium text-theme-muted uppercase tracking-[0.18em]">
+              Synergy Virtual Academy
+            </p>
+          </div>
         </Link>
 
         {/* Mobile Hamburger */}
